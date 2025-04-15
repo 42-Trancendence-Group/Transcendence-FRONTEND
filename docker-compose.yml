@@ -1,46 +1,17 @@
-version: '3.8'
-
 services:
-  # Frontend Service (TypeScript/React/Vue/Angular)
   frontend:
-    build:
-      context: 
-      dockerfile: 
+    build: ./frontend
     ports:
-    volumes:
-    environment:
-    depends_on:
+      - "3000:3000"
     networks:
-
-  # GetWay service  
-  Getway:
-    build:
-      context: 
-      dockerfile: 
-    ports:
+      - transcendence_network
     volumes:
+      - ./frontend:/app
+      - /app/node_modules
     environment:
-    depends_on:
-    networks:
-
-  # Backend Service  
-
-  # Web Server (Nginx)
-  
-  # Database (MySQL/MariaDB - opcional se usar banco de dados)
-  
-
-  # WebSocket Server (opcional para jogo em tempo real)
-  
-
-volumes:
-  pong_db_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /goinfre/pong_db_data # Ajuste para /sgoinfre se necessário
-      o: bind
-
+      - NODE_ENV=development
+    restart: unless-stopped
+    
 networks:
-  pong-network:
+  transcendence_network:
     driver: bridge
