@@ -1,17 +1,34 @@
+
+
 services:
   frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
+    build: 
+      context: ./frontend
+    container_name: transcendence_frontend
     networks:
       - transcendence_network
+    environment:
+      - NODE_ENV=production
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
-    restart: unless-stopped
-    
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: transcendence_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./frontend/dist:/usr/share/nginx/html:ro
+    networks:
+      - transcendence_network
+    depends_on:
+      - frontend
+
 networks:
   transcendence_network:
     driver: bridge

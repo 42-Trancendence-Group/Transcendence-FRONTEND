@@ -5,6 +5,7 @@ WORKDIR /app
 # Instala dependências necessárias
 RUN apk add --no-cache git
 
+RUN npm install -g typescript
 # Copia arquivos de configuração
 COPY package.json package-lock.json ./
 
@@ -17,6 +18,7 @@ COPY . .
 # Build da aplicação
 RUN npm run build
 
+RUN mkdir -p /app/dist && chown -R node:node /app
 # Expõe a porta
 EXPOSE 3000
 
