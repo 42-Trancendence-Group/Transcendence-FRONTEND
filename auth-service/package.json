@@ -7,7 +7,14 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": ["auth", "user", "login", "register", "jwt", "2fa"],
+  "keywords": [
+    "auth",
+    "user",
+    "login",
+    "register",
+    "jwt",
+    "2fa"
+  ],
   "author": "clima-fr && pin3dev",
   "license": "ISC",
   "dependencies": {

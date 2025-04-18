@@ -15,6 +15,6 @@ app.decorate("hasher", hasher); // Adiciona hasher como fastify.hasher
 app.register(registerRoutes);
 
 // Inicia o servidor na porta 4000
-app.listen({ port: 4000 }, () => {
+app.listen({ port: 4000, host: '0.0.0.0'  }, () => {
   console.log("✅ Auth service rodando na porta 4000");
 });

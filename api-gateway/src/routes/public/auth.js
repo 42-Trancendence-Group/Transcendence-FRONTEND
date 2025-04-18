@@ -6,7 +6,7 @@ module.exports = async function (fastify) {
     console.log("🔎 Corpo recebido:", request.body);
 
     try {
-      const res = await fetch("http://localhost:4000/register", {
+      const res = await fetch("http://auth-service:4000/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
