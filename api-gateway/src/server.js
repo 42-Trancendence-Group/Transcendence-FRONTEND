@@ -19,6 +19,6 @@ app.register(createServiceProxy({
   target: "http://user:4001"
 }));
 
-app.listen({ port: 3000 }, () => {
+app.listen({ port: 3000, host: '0.0.0.0' }, () => {
   console.log("🚪 API Gateway rodando na porta 3000");
 });
