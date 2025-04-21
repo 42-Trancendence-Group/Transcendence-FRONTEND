@@ -7,4 +7,8 @@ async function hashPassword(password) {
   return await bcrypt.hash(password, SALT_ROUNDS);
 }
 
-module.exports = { hashPassword }; // Exporta função para ser usada no use case
+async function compare(password, hashed) {
+  return await bcrypt.compare(password, hashed);
+}
+
+module.exports = { hashPassword, compare }; // Exporta função para ser usada no use case
