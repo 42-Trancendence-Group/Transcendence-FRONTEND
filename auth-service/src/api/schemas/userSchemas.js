@@ -24,5 +24,35 @@ const registerBody = {
       }
     }
   };
+
+  const loginBody = {
+    type: "object",
+    required: ["email", "password"],
+    properties: {
+      email: { type: "string", format: "email" },
+      password: { type: "string", minLength: 6 }
+    }
+  };
   
-  module.exports = { registerBody, registerResponse }; // Exporta schemas
+  const loginResponse = {
+    200: {
+      type: "object",
+      properties: {
+        userId: { type: "number" },
+        message: { type: "string" }
+      }
+    },
+    401: {
+      type: "object",
+      properties: {
+        error: { type: "string" }
+      }
+    }
+  };
+  
+  module.exports = {
+    registerBody,
+    registerResponse,
+    loginBody,
+    loginResponse
+  }; // Exporta schemas

@@ -1,5 +1,7 @@
 const Fastify = require("fastify"); // Cria o servidor Fastify
 const registerRoutes = require("./api/routes/register"); // Importa rota de registro
+const loginRoutes = require("./api/routes/login"); // Importa rota de login
+
 
 // Importa dependências do mundo externo
 const userRepo = require("./infrastructure/db/userRepoSqlite");
@@ -13,6 +15,8 @@ app.decorate("hasher", hasher); // Adiciona hasher como fastify.hasher
 
 // Registra a rota
 app.register(registerRoutes);
+app.register(loginRoutes);
+
 
 // Inicia o servidor na porta 4000
 app.listen({ port: 4000, host: '0.0.0.0'  }, () => {
