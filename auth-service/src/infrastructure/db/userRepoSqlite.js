@@ -35,4 +35,12 @@ async function save(user) {
   });
 }
 
-module.exports = { findByEmail, save }; // Exporta as funções do repositório concreto
+async function findById(id) {
+  return await get("SELECT * FROM users WHERE id = ?", [id]);
+}
+
+module.exports = {
+  findByEmail,
+  save,
+  findById // ← exporta a função nova
+};

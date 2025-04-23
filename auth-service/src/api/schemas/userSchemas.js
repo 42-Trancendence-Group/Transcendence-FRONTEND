@@ -81,5 +81,7 @@ const registerBody = {
     registerBody,
     registerResponse,
     loginBody,
-    loginResponse
-  }; // Exporta schemas
+    loginResponse,
+    twoFABody,
+    twoFAResponse // ✅ agora está disponível para os arquivos de rota
+  };
