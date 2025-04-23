@@ -20,20 +20,13 @@ async function findByEmail(email) {
   return await get("SELECT * FROM users WHERE email = ?", [email]);
 }
 
-/*
-  Essa função é responsável por salvar um novo usuário no banco de dados
-  utilizando a função `run` do SQLite para executar uma instrução SQL de inserção.
-
-  Pelo scopo da interface definida em userRepository.js, essa função
-  deve existir, mas pode usar o acesso a qualquer banco de dados
-
-  A interface e o resto do código não precisam saber como a função é implementada
-*/
 async function save(user) {
   return await new Promise((resolve, reject) => {
     db.run(
-      "INSERT INTO users (email, password) VALUES (?, ?)",
-      [user.email, user.passwordHash],
+      //"INSERT INTO users (email, password) VALUES (?, ?)",
+      //[user.email, user.passwordHash],
+      "INSERT INTO users (email, password, twoFASecret) VALUES (?, ?, ?)",
+      [user.email, user.passwordHash, user.twoFASecret],
       function (err) {
         if (err) return reject(err);
         resolve({ lastID: this.lastID });

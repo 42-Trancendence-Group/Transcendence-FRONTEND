@@ -14,7 +14,8 @@ const registerBody = {
       type: "object",
       properties: {
         userId: { type: "number" },
-        message: { type: "string" }
+        message: { type: "string" },
+        otpauthUrl: { type: "string" } // <- novo
       }
     },
     400: {
@@ -49,7 +50,33 @@ const registerBody = {
       }
     }
   };
+
+  const twoFABody = {
+    type: "object",
+    required: ["userId", "token"], 
+    properties: {
+      userId: { type: "number" },
+      token: { type: "string", minLength: 6, maxLength: 6 }
+    }
+  };
   
+  const twoFAResponse = {
+    200: {
+      type: "object",
+      properties: {
+        message: { type: "string" },
+        userId: { type: "number" }
+      }
+    },
+    401: {
+      type: "object",
+      properties: {
+        error: { type: "string" }
+      }
+    }
+  };
+
+    
   module.exports = {
     registerBody,
     registerResponse,

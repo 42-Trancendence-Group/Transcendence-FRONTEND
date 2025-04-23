@@ -9,7 +9,7 @@ const createServiceProxy = require("./proxy/serviceProxy");
 // Deifinição de configuração do servidor
 async function buildServer() {
   const app = Fastify();
-
+  // const app = Fastify({ logger: true });
   await app.register(corsPlugin);
 
   // ASSINATURA DIRETA DE PROXY, DESCARTADO
@@ -30,7 +30,6 @@ async function buildServer() {
   await app.ready();
   console.log("📦 Rotas disponíveis:");
   console.log(app.printRoutes());
-
 
 }
 
