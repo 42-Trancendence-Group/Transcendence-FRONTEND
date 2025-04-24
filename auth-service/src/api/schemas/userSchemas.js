@@ -36,12 +36,33 @@ const registerBody = {
   };
   
   const loginResponse = {
+    // 200: {
+    //   type: "object",
+    //   properties: {
+    //     userId: { type: "number" },
+    //     message: { type: "string" }
+    //   }
+    // },
     200: {
-      type: "object",
-      properties: {
-        userId: { type: "number" },
-        message: { type: "string" }
-      }
+      oneOf: [
+        {
+          type: "object",
+          properties: {
+            userId: { type: "number" },
+            message: { type: "string" }
+          },
+          required: ["userId", "message"]
+        },
+        {
+          type: "object",
+          properties: {
+            userId: { type: "number" },
+            status: { type: "string", enum: ["2FA_REQUIRED"] },
+            message: { type: "string" }
+          },
+          required: ["userId", "status"]
+        }
+      ]
     },
     401: {
       type: "object",
@@ -56,7 +77,12 @@ const registerBody = {
     required: ["userId", "token"], 
     properties: {
       userId: { type: "number" },
-      token: { type: "string", minLength: 6, maxLength: 6 }
+      token: {
+        type: "string",
+        minLength: 6,
+        maxLength: 6,
+        pattern: "^[0-9]{6}$"
+      }
     }
   };
   
@@ -82,6 +108,6 @@ const registerBody = {
     registerResponse,
     loginBody,
     loginResponse,
-    twoFABody,
-    twoFAResponse // ✅ agora está disponível para os arquivos de rota
+    twoFABody, // criado para ser usado na rota 2fa
+    twoFAResponse // criado para ser usado na rota 2fa
   };
