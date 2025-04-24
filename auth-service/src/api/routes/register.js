@@ -1,34 +1,3 @@
-/*const { registerBody, registerResponse } = require("../schemas/userSchemas"); // Schemas de validação
-const { registerUser } = require("../../application/use_cases/registerUser"); // Caso de uso
-
-
-module.exports = async function (fastify) {
-  fastify.post("/register", { 
-    schema: {
-      body: registerBody, 
-      response: registerResponse 
-    }
-  }, async (request, reply) => { 
-    const { email, password } = request.body; 
-
-    try {
-
-      const result = await registerUser(email, password, {
-        userRepo: fastify.userRepo,
-        hasher: fastify.hasher
-      });
-
-      reply.code(201).send({
-        userId: result.userId,
-        message: "Usuário criado com sucesso"
-      });
-
-    } catch (err) {
-      reply.code(400).send({ error: err.message });
-    }
-  });
-};
-*/
 const { registerBody, registerResponse } = require("../schemas/userSchemas");
 const { registerUser } = require("../../application/use_cases/registerUser");
 

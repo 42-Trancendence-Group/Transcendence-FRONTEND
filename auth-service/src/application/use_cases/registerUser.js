@@ -1,36 +1,6 @@
-/*
-const User = require("../../domain/entities/user"); // Importa a entidade de domínio
-
-async function registerUser(email, password, { userRepo, hasher }) {
-  const existing = await userRepo.findByEmail(email); // Verifica se o e-mail já está cadastrado
-  if (existing) {
-    throw new Error("Email já cadastrado."); // Regra de negócio: impedir duplicidade
-  }
-
-  const hashed = await hasher.hashPassword(password); // Gera o hash da senha
-  const user = new User(email, hashed); // Cria entidade com e-mail e hash
-
-  const saved = await userRepo.save(user); // Salva no banco
-
-  return { userId: saved.lastID }; // Retorna ID do novo usuário
-}
-
-module.exports = { registerUser }; // Exporta o caso de uso
-*/ 
-
 const User = require("../../domain/entities/user"); // Entidade
 const speakeasy = require("speakeasy"); // Para gerar o segredo TOTP
 
-/*
-   Caso de uso para registro de novo usuário com 2FA obrigatório
-
-   - Verifica duplicidade
-   - Gera hash da senha
-   - Gera segredo 2FA
-   - Cria entidade
-   - Salva no banco
-   - Retorna ID e otpauthUrl (para o frontend gerar QR Code)
-*/
 async function registerUser(email, password, { userRepo, hasher }) {
   const existing = await userRepo.findByEmail(email);
   if (existing) {

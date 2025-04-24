@@ -6,16 +6,6 @@ const run = util.promisify(db.run).bind(db); // Transforma db.run em uma funçã
 
 // Busca usuário por email no banco de dados
 
-/*
-  Essa função é responsável por buscar um usuário no banco de dados
-  através do e-mail fornecido. Ela utiliza a função `get` do SQLite
-  para executar uma consulta SQL e retorna o resultado.
-
-  Pelo scopo da interface definida em userRepository.js, essa função
-  deve existir, mas pode usar o acesso a qualquer banco de dados
-
-  A interface e o resto do código não precisam saber como a função é implementada
-*/
 async function findByEmail(email) {
   return await get("SELECT * FROM users WHERE email = ?", [email]);
 }
