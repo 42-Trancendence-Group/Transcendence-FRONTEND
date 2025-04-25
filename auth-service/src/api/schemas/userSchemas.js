@@ -14,7 +14,8 @@ const registerBody = {
       type: "object",
       properties: {
         userId: { type: "number" },
-        message: { type: "string" }
+        message: { type: "string" },
+        otpauthUrl: { type: "string" } // <- novo
       }
     },
     400: {
@@ -35,11 +36,62 @@ const registerBody = {
   };
   
   const loginResponse = {
+    // 200: {
+    //   type: "object",
+    //   properties: {
+    //     userId: { type: "number" },
+    //     message: { type: "string" }
+    //   }
+    // },
+    200: {
+      oneOf: [
+        {
+          type: "object",
+          properties: {
+            userId: { type: "number" },
+            message: { type: "string" }
+          },
+          required: ["userId", "message"]
+        },
+        {
+          type: "object",
+          properties: {
+            userId: { type: "number" },
+            status: { type: "string", enum: ["2FA_REQUIRED"] },
+            message: { type: "string" }
+          },
+          required: ["userId", "status"]
+        }
+      ]
+    },
+    401: {
+      type: "object",
+      properties: {
+        error: { type: "string" }
+      }
+    }
+  };
+
+  const twoFABody = {
+    type: "object",
+    required: ["userId", "token"], 
+    properties: {
+      userId: { type: "number" },
+      token: {
+        type: "string",
+        minLength: 6,
+        maxLength: 6,
+        pattern: "^[0-9]{6}$"
+      }
+    }
+  };
+  
+  const twoFAResponse = {
     200: {
       type: "object",
       properties: {
-        userId: { type: "number" },
-        message: { type: "string" }
+        message: { type: "string" },
+        userId: { type: "number" }
       }
     },
     401: {
@@ -49,10 +101,13 @@ const registerBody = {
       }
     }
   };
-  
+
+    
   module.exports = {
     registerBody,
     registerResponse,
     loginBody,
-    loginResponse
-  }; // Exporta schemas
+    loginResponse,
+    twoFABody, // criado para ser usado na rota 2fa
+    twoFAResponse // criado para ser usado na rota 2fa
+  };

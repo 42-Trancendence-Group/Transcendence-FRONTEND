@@ -1,14 +1,18 @@
-/* 
-   Classe da entidade User, que representa o domínio da aplicação
-
-   Posteriormente, algumas lógicas de verificação podem
-   ser implementadas aqui, como validação de e-mail, etc.
-*/
 class User {
-    constructor(email, passwordHash) {
-      this.email = email;
-      this.passwordHash = passwordHash;
-    }
+  constructor(email, passwordHash, twoFASecret = null) {
+    this.id = null; // será atribuído depois
+    this.email = email;
+    this.passwordHash = passwordHash;
+    this.twoFASecret = twoFASecret;
   }
-  
-  module.exports = User; // Exporta a entidade para uso nos casos de uso
+
+  setId(id) {
+    this.id = id;
+  }
+
+  requiresTwoFA() {
+    return !!this.twoFASecret; // Verifica se o usuário tem 2FA habilitado
+  }
+}
+
+module.exports = User; 
