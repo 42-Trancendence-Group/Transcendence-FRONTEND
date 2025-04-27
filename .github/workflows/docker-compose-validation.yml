@@ -16,29 +16,39 @@ jobs:
 
     - name: Install Tools
       run: |
-        sudo apt-get update
-        sudo apt-get install -y netcat-openbsd curl
-        curl -L https://github.com/mikefarah/yq/releases/download/v4.40.5/yq_linux_amd64 -o /usr/local/bin/yq
+        set +x
+        sudo apt-get update > /dev/null 2>&1
+        sudo apt-get install -y netcat-openbsd curl > /dev/null 2>&1
+        curl -L https://github.com/mikefarah/yq/releases/download/v4.40.5/yq_linux_amd64 -o /usr/local/bin/yq > /dev/null 2>&1
         chmod +x /usr/local/bin/yq
+        echo "✅ Ferramentas instaladas com sucesso!"
 
     - name: Docker Compose Up
       run: |
-        docker compose up -d
+        set +x
+        echo "🚀 Subindo containers do docker-compose..."
+        docker compose up -d > /dev/null 2>&1
+        echo "✅ Containers rodando."
 
     - name: Wait for containers to be ready
       run: |
-        echo "Esperando containers ficarem prontos..."
+        set +x
+        echo "⏳ Esperando containers ficarem prontos..."
         sleep 15
+        echo "✅ Containers prontos."
 
     - name: Create validation script
       run: |
+        set +x
+        echo "🛠️ Criando script de validação..."
         cat << 'EOF' > validate_services.sh
         #!/bin/bash
         set -e
+        set +x
 
         echo "📝 Criando relatório de validação..."
-        docker run -d --name test_container --network internal_network busybox tail -f /dev/null
-        docker network connect external_network test_container
+        docker run -d --name test_container --network internal_network busybox tail -f /dev/null > /dev/null 2>&1
+        docker network connect external_network test_container > /dev/null 2>&1
 
         echo "| Serviço           | Porta | Status    | Dica                          |" > validation_report.md
         echo "|:------------------|:------|:----------|:------------------------------|" >> validation_report.md
@@ -62,7 +72,7 @@ jobs:
           fi
 
           echo "🔌 Testando conexão para $service:$EXPOSE_PORT"
-          docker exec test_container sh -c "nc -z -w 5 $service $EXPOSE_PORT"
+          docker exec test_container sh -c "nc -z -w 5 $service $EXPOSE_PORT" > /dev/null 2>&1
           if [ $? -ne 0 ]; then
             echo "❌ Falha na conexão TCP para $service:$EXPOSE_PORT"
             echo "💡 Dica: verifique se o serviço $service está escutando corretamente."
@@ -76,10 +86,14 @@ jobs:
         EOF
 
         chmod +x validate_services.sh
+        echo "✅ Script de validação criado."
 
     - name: Run validation script
       run: |
+        set +x
+        echo "🏃‍♂️ Executando validação dos serviços..."
         ./validate_services.sh
+        echo "✅ Validação concluída."
 
     - name: Upload Relatório de Validação
       if: always()
@@ -91,5 +105,8 @@ jobs:
     - name: Cleanup
       if: always()
       run: |
-        docker rm -f test_container || true
-        docker compose down
+        set +x
+        echo "🧹 Limpando containers..."
+        docker rm -f test_container > /dev/null 2>&1 || true
+        docker compose down > /dev/null 2>&1
+        echo "✅ Cleanup finalizado."
