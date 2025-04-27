@@ -17,7 +17,7 @@ jobs:
     - name: Install Tools
       run: |
         sudo apt-get update
-        sudo apt-get install -y yq netcat
+        sudo apt-get install -y yq netcat-openbsd
 
     - name: Docker Compose Up
       run: |
