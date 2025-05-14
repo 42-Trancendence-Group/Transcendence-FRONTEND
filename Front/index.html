@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pong-Ping</title>
+    <meta name="description" content="Jogue ping-pong online com estética arcade neon" />
+    <meta name="author" content="PingPong Arcade" />
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
     <!-- O Vite irá injetar o CSS do Tailwind aqui ou via JS -->
     <!-- Se você tiver um arquivo CSS principal (ex: src/style.css) importando Tailwind,
          Vite o processará. Caso contrário, o import no main.ts já deve ser suficiente.
@@ -11,25 +15,8 @@
     <link rel="stylesheet" href="/src/css/style.css">     <!-- Ajuste o caminho se necessário -->
     <link rel="icon" href="./public/pong.png" type="image/png">
 </head>
-<body class="bg-gray-900 text-white min-h-screen flex flex-col">
-
-    <!-- Nosso Header ficará aqui -->
-    <header id="main-header" class="bg-gray-800 text-white p-4 shadow-md">
-        <!-- Conteúdo do Header será adicionado via TypeScript -->
-    </header>
-
-    <!-- Onde o conteúdo dinâmico da SPA será renderizado -->
-    <main id="app-root" class="flex-grow container mx-auto p-4">
-        <!-- Conteúdo inicial ou de carregamento pode vir aqui -->
-        <h1 class="text-3xl font-bold text-center">Welcome to Pong!</h1>
-    </main>
-
-    <!-- Nosso Footer ficará aqui -->
-    <footer id="main-footer" class="bg-gray-800 text-white p-4 text-center text-sm">
-        <!-- Conteúdo do Footer será adicionado via TypeScript -->
-    </footer>
-
-    <!-- Ponto de entrada do nosso TypeScript -->
+<body>
+    <div id="root"></div>
     <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
