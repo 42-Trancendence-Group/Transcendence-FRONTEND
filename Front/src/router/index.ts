@@ -1,10 +1,12 @@
 import { renderHome } from '../pages/HomePage';
 import { renderNotFound } from '../pages/NotFoundPage';
+import { renderLogin } from '../pages/LoginPage';
 
 // Definição das rotas disponíveis
 const routes: Record<string, () => void> = {
   '/': renderHome,
-  '*': renderNotFound
+  '*': renderNotFound,
+  '/Login': renderLogin
 };
 
 // Função para renderizar a página baseada na rota atual

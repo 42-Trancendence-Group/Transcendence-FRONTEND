@@ -55,10 +55,12 @@ export function createNavbar(): HTMLElement {
   const loginBtn = document.createElement('button');
   loginBtn.className = 'border-neon-blue text-neon-blue hover:bg-neon-blue hover:text-arcade-darker px-4 py-2 rounded border';
   loginBtn.textContent = 'Login';
+  loginBtn.addEventListener('click', ()=> navigateTo('/Login'))
   
   const registerBtn = document.createElement('button');
   registerBtn.className = 'bg-neon-pink text-arcade-darker hover:bg-neon-purple hover:text-white px-4 py-2 rounded';
   registerBtn.textContent = 'Registrar';
+  registerBtn.addEventListener('click', ()=> navigateTo('/Registrar'))
   
   authButtons.appendChild(loginBtn);
   authButtons.appendChild(registerBtn);
