@@ -1,0 +1,28 @@
+.
+├── Back
+│   ├── Dockerfile
+│   ├── node_modules
+│   ├── package.json
+│   ├── src
+│   │   └── main.ts
+│   └── tsconfig.json
+├── Front
+│   ├── Dockerfile
+│   ├── index.html
+│   ├── node_modules
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── src
+│   │   └── main.ts
+│   ├── tailwind.config.js
+│   ├── tsconfig.json
+│   ├── vite.config.js
+│   └── webpack.config.js
+├── README.md
+├── docker-compose.yml
+├── modulos-de-interesse-transcendence.txt
+├── ps.txt
+└── requisitos-minimos.txt
+
+6 directories, 19 files

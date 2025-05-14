@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Você pode adicionar estilos globais personalizados aqui, se necessário,
+   mas a ideia é usar o máximo de classes Tailwind possível. */
+body {
+  font-family: 'Arial', sans-serif; /* Exemplo de uma fonte base */
+}
