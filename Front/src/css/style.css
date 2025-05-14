@@ -161,13 +161,18 @@
 }
 
 .text-neon-purple, .bg-neon-purple {
-  color: #8B5CF6;
+  color: #000000;
+  background-color: #8B5CF6;
+}
+
+.text-neon-pink {
+  color: #D946EF;
   background-color: #000000;
 }
 
-.text-neon-pink, .bg-neon-pink {
-  color: #D946EF;
-  background-color: #000000;
+.bg-neon-pink{
+  color: #000000;
+  background-color: #D946EF;
 }
 
 .text-neon-green, .bg-neon-green {

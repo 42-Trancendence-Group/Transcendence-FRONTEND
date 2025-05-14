@@ -24,17 +24,12 @@ export function createFooter(): HTMLElement {
   const logoIcon = document.createElement('span');
   logoIcon.className = 'text-neon-pink';
   logoIcon.innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="6" width="20" height="12" rx="2"/>
-      <path d="M6 12h4"/>
-      <circle cx="15" cy="11" r="1"/>
-      <circle cx="18" cy="13" r="1"/>
-    </svg>
+ <img src="../public/joystick.png" width="24" height="24" alt="Joystick Icon">
   `;
   
   const logoText = document.createElement('span');
   logoText.className = 'font-bold text-lg text-white neon-text';
-  logoText.innerHTML = 'PingPong<span class="text-neon-blue">Arcade</span>';
+  logoText.innerHTML = 'Ping Pong';
   
   logoLink.appendChild(logoIcon);
   logoLink.appendChild(logoText);
