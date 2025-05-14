@@ -152,12 +152,17 @@
 }
 
 .bg-arcade-darkPurple {
-  background-color: #301934;
+  background: linear-gradient(60deg, #067a7a, #442f74, #853192);
 }
 
-.text-neon-blue, .bg-neon-blue {
+.text-neon-blue{
   color: #00FFFF;
   background-color: #000000;
+}
+
+.bg-neon-blue {
+  color: #000000;
+  background-color: #00FFFF;
 }
 
 .text-neon-purple, .bg-neon-purple {
@@ -175,14 +180,24 @@
   background-color: #D946EF;
 }
 
-.text-neon-green, .bg-neon-green {
+.text-neon-green{
   color: #39FF14;
   background-color: #000000;
 }
 
-.text-neon-orange, .bg-neon-orange {
+.bg-neon-green {
+  color: #000000;
+  background-color: #39FF14;
+}
+
+.text-neon-orange{
   color: #F97316;
   background-color: #000000;
+}
+
+.bg-neon-orange {
+  color: #000000;
+  background-color: #F97316;
 }
 
 .border-neon-blue {

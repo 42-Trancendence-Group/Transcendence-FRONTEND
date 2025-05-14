@@ -12,7 +12,7 @@ export function createHero(): HTMLElement {
   const gridOverlay = document.createElement('div');
   gridOverlay.className = 'absolute inset-0 z-0';
   gridOverlay.style.backgroundSize = '50px 50px';
-  gridOverlay.style.backgroundImage = 'linear-gradient(rgba(65, 0, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(65, 0, 255, 0.1) 1px, transparent 1px)';
+  gridOverlay.style.backgroundImage = 'linear-gradient(rgba(65, 0, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(65, 0, 255, 0.1) 1px)';
   gridOverlay.style.backgroundPosition = 'center center';
   
   // Content
@@ -27,16 +27,14 @@ export function createHero(): HTMLElement {
   leftColumn.className = 'lg:w-1/2 text-center lg:text-left';
   
   const heroTitle = document.createElement('h1');
-  heroTitle.className = 'text-4xl md:text-5xl lg:text-6xl font-bold mb-4';
+  heroTitle.className = 'text-4xl md:text-5xl lg:text-4xl font-bold mb-4';
   heroTitle.innerHTML = `
-    <span class="text-white">Domine o </span>
-    <span class="bg-clip-text text-neon-gradient animate-gradient-flow">Ping-Pong</span>
-    <span class="text-white"> Virtual</span>
+    <span class="text-white">FT_TRANSCENDENCE!</span>
   `;
   
   const heroDescription = document.createElement('p');
   heroDescription.className = 'text-xl text-gray-300 mb-8';
-  heroDescription.textContent = 'O jogo de ping-pong online mais emocionante com visual arcade neon. Desafie jogadores de todo o mundo e torne-se o campeão!';
+  heroDescription.textContent = 'Pronto para um Pong turbinado? Criámos este site com torneios, multiplayer e muito mais. Chega de conversa, é hora de jogar e brilhar!';
   
   const buttonContainer = document.createElement('div');
   buttonContainer.className = 'flex flex-col sm:flex-row gap-4 justify-center lg:justify-start';
@@ -49,7 +47,7 @@ export function createHero(): HTMLElement {
     </svg>
     Jogar Agora
   `;
-  primaryButton.addEventListener('click', () => navigateTo('/jogar'));
+  primaryButton.addEventListener('click', () => navigateTo('/Login'));
   
   const secondaryButton = document.createElement('button');
   secondaryButton.className = 'border-neon-blue text-neon-blue hover:bg-neon-blue hover:text-arcade-darker px-8 py-6 text-lg border rounded';
@@ -121,15 +119,15 @@ export function createHero(): HTMLElement {
       color: 'neon-blue'
     },
     {
-      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4"/><circle cx="15" cy="11" r="1"/><circle cx="18" cy="13" r="1"/></svg>`,
+      icon: `<img src="../public/joystick.png" width="24" height="24" alt="Joystick Icon">`,
       title: 'Visual Arcade',
       description: 'Gráficos neon vibrantes e efeitos visuais incríveis para uma experiência arcade autêntica.',
       color: 'neon-pink'
     },
     {
       icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>`,
-      title: 'Torneios & Prêmios',
-      description: 'Participe de torneios regulares e ganhe prêmios exclusivos para seu perfil.',
+      title: 'Torneios',
+      description: 'Participe de torneios regulares com outros jogadores e amigos.',
       color: 'neon-green'
     }
   ];
