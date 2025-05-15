@@ -1,9 +1,8 @@
 
 import { createNavbar } from '../components/Navbar';
 import { createHero } from '../components/Hero';
-import { createGameModes } from '../components/GameModes';
+import { createCreatorsSection } from '../components/Creators';
 import { createLeaderboardPreview } from '../components/LeaderboardPreview';
-import { createCallToAction } from '../components/CallToAction';
 import { createFooter } from '../components/Footer';
 
 export function renderHome(): void {
@@ -21,9 +20,9 @@ export function renderHome(): void {
   main.className = 'flex-grow container mx-auto px-4 py-8';
   
   main.appendChild(createHero());
-  main.appendChild(createGameModes());
+  main.appendChild(createCreatorsSection());
   main.appendChild(createLeaderboardPreview());
-  main.appendChild(createCallToAction());
+  
   
   container.appendChild(main);
   container.appendChild(createFooter());

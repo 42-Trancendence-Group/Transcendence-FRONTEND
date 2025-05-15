@@ -166,12 +166,7 @@ function setupFormInteractions(): void {
     }
   });
 
-  const googleLoginBtn = document.getElementById('login-google');
-  
-  googleLoginBtn?.addEventListener('click', () => {
-    showToast('Login com Google em breve!', 'info'); // Mensagem atualizada
-  });
-  
+ 
 }
 
 /**

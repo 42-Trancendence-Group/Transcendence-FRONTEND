@@ -31,8 +31,7 @@ export function createNavbar(): HTMLElement {
   desktopNav.className = 'hidden md:flex items-center gap-6';
   
   const navItems = [
-    { text: 'Rankings', path: '/rankings' },
-    { text: 'Torneios', path: '/torneios' }
+    { }
   ];
   
   navItems.forEach(item => {

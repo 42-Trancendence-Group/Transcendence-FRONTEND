@@ -2,145 +2,82 @@ import { navigateTo } from '../router/index';
 
 export function createFooter(): HTMLElement {
   const footer = document.createElement('footer');
-  footer.className = 'bg-arcade-darker border-t border-neon-blue py-6';
-  
+  // A classe 'items-center' no footer em si não é necessária se o container já cuida do alinhamento interno.
+  // py-8 para um pouco mais de padding vertical geral.
+  footer.className = 'bg-arcade-darker border-t border-neon-blue py-3';
+
   const container = document.createElement('div');
-  container.className = 'container mx-auto px-6';
-  
-  // Footer grid
-  const grid = document.createElement('div');
-  grid.className = 'grid grid-cols-1 md:grid-cols-4 gap-8';
-  
-  // Logo section
+  // Alterações aqui:
+  // 'flex flex-col' para empilhar os itens verticalmente.
+  // 'items-center' para centralizar os itens filhos (logoSection e bottomSection) horizontalmente.
+  // 'gap-6' ou 'gap-8' para criar um espaço vertical entre o logo e a seção de copyright.
+  container.className = 'container mx-auto px-1 flex flex-col items-center gap-2';
+
+  // Logo section (não precisa mais do 'grid' wrapper para este layout simples)
   const logoSection = document.createElement('div');
-  
+  // O logoSection será centralizado pelo 'items-center' do 'container'.
+  // Nenhuma classe de centralização adicional é necessária aqui para o logoSection em si.
+
   const logoLink = document.createElement('a');
-  logoLink.className = 'flex items-center gap-2 cursor-pointer';
+  logoLink.className = 'flex items-center gap-1 cursor-pointer'; // Mantém o ícone e texto alinhados
   logoLink.addEventListener('click', (e) => {
     e.preventDefault();
     navigateTo('/');
   });
-  
+
   const logoIcon = document.createElement('span');
   logoIcon.className = 'text-neon-pink';
   logoIcon.innerHTML = `
  <img src="../public/joystick.png" width="24" height="24" alt="Joystick Icon">
   `;
-  
+
   const logoText = document.createElement('span');
   logoText.className = 'font-bold text-lg text-white neon-text';
   logoText.innerHTML = 'Ping Pong';
-  
+
   logoLink.appendChild(logoIcon);
   logoLink.appendChild(logoText);
-  
-  const description = document.createElement('p');
-  description.className = 'mt-3 text-sm text-gray-400';
-  description.textContent = 'A melhor experiência de ping-pong online com visual arcade neon.';
-  
   logoSection.appendChild(logoLink);
-  logoSection.appendChild(description);
-  
-  // Quick Links section
-  const quickLinks = createFooterSection('Links Rápidos', [
-    { text: 'Jogar Agora', path: '/jogar' },
-    { text: 'Rankings', path: '/rankings' },
-    { text: 'Torneios', path: '/torneios' },
-    { text: 'Como Jogar', path: '/como-jogar' }
-  ]);
-  
-  // Community section
-  const communityLinks = createFooterSection('Comunidade', [
-    { text: 'Discord', path: '#' },
-    { text: 'Twitter', path: '#' },
-    { text: 'Instagram', path: '#' },
-    { text: 'YouTube', path: '#' }
-  ]);
-  
-  // Support section
-  const supportLinks = createFooterSection('Suporte', [
-    { text: 'FAQ', path: '/faq' },
-    { text: 'Contato', path: '/contato' },
-    { text: 'Termos de Uso', path: '/termos' },
-    { text: 'Privacidade', path: '/privacidade' }
-  ]);
-  
-  // Add all sections to grid
-  grid.appendChild(logoSection);
-  grid.appendChild(quickLinks);
-  grid.appendChild(communityLinks);
-  grid.appendChild(supportLinks);
-  
+
   // Footer bottom section
   const bottomSection = document.createElement('div');
-  bottomSection.className = 'mt-8 pt-4 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center';
-  
+  // Alterações aqui:
+  // 'w-full' para que o text-center funcione corretamente na largura disponível.
+  // 'text-center' para centralizar o parágrafo de copyright.
+  // 'pt-6' ou 'pt-8' para adicionar padding acima do texto de copyright, e 'border-t' para a linha.
+  // A classe 'items-center' original aqui não era muito eficaz sem display:flex.
+  bottomSection.className = 'w-full border-t border-gray-700 pt-2 text-center'; // Usando uma cor de borda um pouco mais sutil
+
   const copyright = document.createElement('p');
-  copyright.className = 'text-sm text-gray-500';
-  copyright.textContent = `© ${new Date().getFullYear()} PingPong Arcade. Todos os direitos reservados.`;
-  
-  const socialLinks = document.createElement('div');
-  socialLinks.className = 'mt-4 sm:mt-0 flex space-x-4';
-  
-  // Social media icons
-  const socialIcons = [
-    {
-      name: 'Twitter',
-      svg: '<path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>'
-    },
-    {
-      name: 'Instagram',
-      svg: '<path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd"></path>'
-    },
-    {
-      name: 'YouTube',
-      svg: '<path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" />'
-    }
-  ];
-  
-  socialIcons.forEach(icon => {
-    const link = document.createElement('a');
-    link.href = '#';
-    link.className = 'text-gray-500 hover:text-neon-pink';
-    
-    const srOnly = document.createElement('span');
-    srOnly.className = 'sr-only';
-    srOnly.textContent = icon.name;
-    
-    const svg = document.createElement('div');
-    svg.className = 'h-5 w-5';
-    svg.innerHTML = `<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">${icon.svg}</svg>`;
-    
-    link.appendChild(srOnly);
-    link.appendChild(svg);
-    socialLinks.appendChild(link);
-  });
-  
+  copyright.className = 'text-gray-500 text-sm'; // Opcional: texto um pouco menor
+  copyright.textContent = `© ${new Date().getFullYear()} Design by Igenial.`;
+
   bottomSection.appendChild(copyright);
-  bottomSection.appendChild(socialLinks);
-  
+
   // Assemble footer
-  container.appendChild(grid);
+  // Removido o 'grid', adicionando logoSection diretamente
+  container.appendChild(logoSection);
   container.appendChild(bottomSection);
   footer.appendChild(container);
-  
+
   return footer;
 }
 
-// Helper function to create footer section
+// Helper function to create footer section (não foi modificada, pois não estava sendo usada no createFooter principal)
+// Se você for usá-la, pode precisar de ajustes de layout semelhantes dependendo de onde ela for inserida.
 function createFooterSection(title: string, links: Array<{text: string, path: string}>): HTMLElement {
   const section = document.createElement('div');
-  
+
   const heading = document.createElement('h3');
   heading.className = 'text-neon-green font-semibold mb-3';
   heading.textContent = title;
-  
+
   const linksList = document.createElement('ul');
   linksList.className = 'space-y-2 text-sm';
-  
+
   links.forEach(link => {
     const listItem = document.createElement('li');
-    
+
     const anchor = document.createElement('a');
     anchor.className = 'text-gray-400 hover:text-neon-blue cursor-pointer';
     anchor.textContent = link.text;
@@ -148,13 +85,13 @@ function createFooterSection(title: string, links: Array<{text: string, path: st
       e.preventDefault();
       navigateTo(link.path);
     });
-    
+
     listItem.appendChild(anchor);
     linksList.appendChild(listItem);
   });
-  
+
   section.appendChild(heading);
   section.appendChild(linksList);
-  
+
   return section;
 }
