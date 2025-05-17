@@ -1,164 +1,199 @@
-// src/components/HowToPlaySection.ts
-
-// Função auxiliar para criar elementos com classes Tailwind
-function createElement<K extends keyof HTMLElementTagNameMap>(
-  tagName: K,
-  classNames: string[] = [],
-  textContent?: string
-): HTMLElementTagNameMap[K] {
-  const element = document.createElement(tagName);
-  element.className = classNames.join(' ');
-  if (textContent) {
-    element.textContent = textContent;
-  }
-  return element;
-}
-
-// Função auxiliar para criar keycaps (mantida para consistência, mas pode ser ajustada)
-function createKeycap(keyText: string, customClasses: string[] = []): HTMLElement {
-  const span = createElement('span', ['keycap', ...customClasses], keyText);
-  return span;
-}
-
-// Função auxiliar para criar ícones de seta (SVG inline)
-function createArrowIcon(direction: 'up' | 'down'): SVGSVGElement {
-    const svgNS = "http://www.w3.org/2000/svg";
-    const svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("xmlns", svgNS);
-    svg.setAttribute("width", "24");
-    svg.setAttribute("height", "24");
-    svg.setAttribute("fill", "currentColor");
-    svg.setAttribute("viewBox", "0 0 16 16");
-    svg.classList.add('inline-block', 'mx-1');
-
-    const path = document.createElementNS(svgNS, "path");
-    path.setAttribute("fill-rule", "evenodd");
-    if (direction === 'up') {
-        path.setAttribute("d", "M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z");
-    } else {
-        path.setAttribute("d", "M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4 4a.5.5 0 0 1-.708-.708L7.5 13.207V1.5a.5.5 0 0 1 .5-.5z");
-    }
-    svg.appendChild(path);
-    return svg;
-}
-
+/**
+ * Creates the How To Play content section
+ */
 export function createHowToPlaySection(): HTMLElement {
-  // Container principal da seção "Como Jogar"
-  const sectionContainer = createElement('div', [
-    'max-w-3xl', 'mx-auto', 'py-8', 'px-4', 'sm:px-6', 'lg:px-8'
-  ]);
-
-  // Título Principal da Página
-  const pageTitle = createElement('h1', [
-    'arcade-font', 'text-4xl', 'md:text-5xl', 'text-center', 'mb-10', 'md:mb-12', 'neon-text-white' // Usar neon-text-white ou outra cor principal
-  ], 'Como Jogar');
-  sectionContainer.appendChild(pageTitle);
-
-  // Card 1: Objetivo do Jogo
-  const objectiveCard = createElement('div', [
-    'bg-arcade-darker', 'bg-opacity-70', 'p-6', 'rounded-lg', 'shadow-lg', 'mb-8',
-    'border-2', 'border-neon-purple' // Borda neon roxa como no exemplo
-  ]);
-  const objectiveTitle = createElement('h2', [
-    'arcade-font', 'text-2xl', 'neon-text-purple', 'mb-3' // Cor do título do card
-  ], 'Objetivo do jogo');
-  const objectiveP1 = createElement('p', ['text-gray-300', 'leading-relaxed', 'mb-2'],
-    'O objetivo do Ping Pong é simples: marcar mais pontos que seu oponente. Um ponto é marcado quando a bola passa pelo adversário e atinge a parede atrás dele.'
-  );
-  const objectiveP2 = createElement('p', ['text-gray-300', 'leading-relaxed'],
+  const container = document.createElement('div');
+  container.className = 'container mx-auto px-4 py-12';
+  
+  // Title
+  const title = document.createElement('h1');
+  title.className = 'text-4xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-400';
+  title.textContent = 'Como Jogar';
+  container.appendChild(title);
+  
+  // Content wrapper
+  const contentWrapper = document.createElement('div');
+  contentWrapper.className = 'max-w-3xl mx-auto';
+  
+  // Objective Section
+  const objectiveSection = createContentSection('Objetivo do jogo', [
+    'O objetivo do Ping Pong é simples: marcar mais pontos que seu oponente. Um ponto é marcado quando a bola passa pelo adversário e atinge a parede atrás dele.',
     'O primeiro jogador a alcançar 11 pontos vence a partida.'
-  );
-  objectiveCard.appendChild(objectiveTitle);
-  objectiveCard.appendChild(objectiveP1);
-  objectiveCard.appendChild(objectiveP2);
-  sectionContainer.appendChild(objectiveCard);
-
-
-  // Card 2: Controles
-  const controlsCard = createElement('div', [
-    'bg-arcade-darker', 'bg-opacity-70', 'p-6', 'rounded-lg', 'shadow-lg', 'mb-8',
-    'border-2', 'border-neon-purple' // Borda neon roxa
   ]);
-  const controlsTitle = createElement('h2', [
-    'arcade-font', 'text-2xl', 'neon-text-purple', 'mb-4'
-  ], 'Controles');
+  contentWrapper.appendChild(objectiveSection);
   
-  const controlsFlexContainer = createElement('div', ['flex', 'flex-col', 'sm:flex-row', 'items-center', 'justify-between', 'gap-4']);
+  // Controls Section
+  const controlsSection = document.createElement('div');
+  controlsSection.className = 'bg-black/50 border border-purple-500/30 rounded-lg mb-8';
   
-  const movementDiv = createElement('div', ['flex', 'items-center', 'gap-2']);
-  movementDiv.appendChild(createArrowIcon('up'));
-  movementDiv.appendChild(createArrowIcon('down'));
-  const movementText = createElement('p', ['text-gray-300', 'leading-relaxed']);
-  movementText.innerHTML = 'Use as setas <strong class="text-neon-blue">para cima</strong> e <strong class="text-neon-blue">para baixo</strong> para mover sua raquete.';
-  movementDiv.appendChild(movementText);
-
-  const pauseDiv = createElement('div', ['flex', 'items-center', 'gap-2']);
-  pauseDiv.appendChild(createKeycap('P', ['h-10', 'w-10', 'flex', 'items-center', 'justify-center', 'text-lg', 'border-neon-blue']));
-  const pauseText = createElement('p', ['text-gray-300', 'leading-relaxed'], 'Pressione a tecla P para pausar ou retomar o jogo.');
-  pauseDiv.appendChild(pauseText);
-
-  controlsFlexContainer.appendChild(movementDiv);
-  controlsFlexContainer.appendChild(pauseDiv);
-
-  controlsCard.appendChild(controlsTitle);
-  controlsCard.appendChild(controlsFlexContainer);
-  sectionContainer.appendChild(controlsCard);
-
-
-  // Card 3: Dicas
-  const tipsCard = createElement('div', [
-    'bg-arcade-darker', 'bg-opacity-70', 'p-6', 'rounded-lg', 'shadow-lg', 'mb-10', // Aumentei margem inferior
-    'border-2', 'border-neon-purple' // Borda neon roxa
-  ]);
-  const tipsTitle = createElement('h2', [
-    'arcade-font', 'text-2xl', 'neon-text-purple', 'mb-3'
-  ], 'Dicas');
-  const tipsList = createElement('ul', ['list-disc', 'list-inside', 'text-gray-300', 'space-y-2', 'leading-relaxed']);
-  const tipItems = [
+  const controlsContent = document.createElement('div');
+  controlsContent.className = 'p-6';
+  
+  const controlsTitle = document.createElement('h2');
+  controlsTitle.className = 'text-2xl font-bold mb-4 text-purple-400';
+  controlsTitle.textContent = 'Controles';
+  controlsContent.appendChild(controlsTitle);
+  
+  const controlsGrid = document.createElement('div');
+  controlsGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-6';
+  
+  // Arrow keys control
+  const arrowControl = document.createElement('div');
+  arrowControl.className = 'flex items-center';
+  
+  const arrowKeys = document.createElement('div');
+  arrowKeys.className = 'mr-4';
+  
+  const keysContainer = document.createElement('div');
+  keysContainer.className = 'flex flex-col items-center';
+  
+  const upKey = document.createElement('div');
+  upKey.className = 'h-10 w-10 text-white border border-white rounded p-1';
+  upKey.textContent = '↑';
+  
+  const downKey = document.createElement('div');
+  downKey.className = 'h-10 w-10 text-white border border-white rounded p-1 mt-1';
+  downKey.textContent = '↓';
+  
+  keysContainer.appendChild(upKey);
+  keysContainer.appendChild(downKey);
+  arrowKeys.appendChild(keysContainer);
+  
+  const arrowText = document.createElement('div');
+  const arrowDesc = document.createElement('p');
+  arrowDesc.className = 'text-gray-300';
+  arrowDesc.innerHTML = 'Use as setas <span class="text-white font-bold">para cima</span> e <span class="text-white font-bold">para baixo</span> para mover sua raquete.';
+  
+  arrowText.appendChild(arrowDesc);
+  arrowControl.appendChild(arrowKeys);
+  arrowControl.appendChild(arrowText);
+  
+  // Pause key control
+  const pauseControl = document.createElement('div');
+  pauseControl.className = 'flex items-center';
+  
+  const pauseKey = document.createElement('div');
+  pauseKey.className = 'mr-4';
+  
+  const pKey = document.createElement('div');
+  pKey.className = 'h-10 w-10 rounded border border-white flex items-center justify-center text-white font-bold';
+  pKey.textContent = 'P';
+  
+  pauseKey.appendChild(pKey);
+  
+  const pauseText = document.createElement('div');
+  const pauseDesc = document.createElement('p');
+  pauseDesc.className = 'text-gray-300';
+  pauseDesc.innerHTML = 'Pressione a tecla <span class="text-white font-bold">P</span> para pausar ou retomar o jogo.';
+  
+  pauseText.appendChild(pauseDesc);
+  pauseControl.appendChild(pauseKey);
+  pauseControl.appendChild(pauseText);
+  
+  controlsGrid.appendChild(arrowControl);
+  controlsGrid.appendChild(pauseControl);
+  controlsContent.appendChild(controlsGrid);
+  controlsSection.appendChild(controlsContent);
+  
+  contentWrapper.appendChild(controlsSection);
+  
+  // Tips Section
+  const tipsSection = document.createElement('div');
+  tipsSection.className = 'bg-black/50 border border-purple-500/30 rounded-lg mb-8';
+  
+  const tipsContent = document.createElement('div');
+  tipsContent.className = 'p-6';
+  
+  const tipsTitle = document.createElement('h2');
+  tipsTitle.className = 'text-2xl font-bold mb-4 text-purple-400';
+  tipsTitle.textContent = 'Dicas';
+  tipsContent.appendChild(tipsTitle);
+  
+  const tipsList = document.createElement('ul');
+  tipsList.className = 'space-y-3 text-gray-300';
+  
+  const tips = [
     'A bola aumenta de velocidade a cada rebatida, fique atento!',
     'O ângulo de rebatida é determinado pela posição em que a bola atinge sua raquete.',
     'Rebater com as extremidades da raquete cria ângulos mais fechados, mas é mais arriscado.',
     'Tente prever a trajetória da bola e posicione sua raquete com antecedência.'
   ];
-  tipItems.forEach(itemText => {
-    const li = createElement('li', [], itemText);
+  
+  tips.forEach(tip => {
+    const li = document.createElement('li');
+    li.className = 'flex items-start';
+    
+    const bullet = document.createElement('span');
+    bullet.className = 'text-purple-400 mr-2';
+    bullet.textContent = '•';
+    
+    const text = document.createElement('span');
+    text.textContent = tip;
+    
+    li.appendChild(bullet);
+    li.appendChild(text);
     tipsList.appendChild(li);
   });
-  tipsCard.appendChild(tipsTitle);
-  tipsCard.appendChild(tipsList);
-  sectionContainer.appendChild(tipsCard);
-
-
-  // Botões de Ação
-  const actionsDiv = createElement('div', ['flex', 'flex-col', 'sm:flex-row', 'justify-center', 'items-center', 'gap-4', 'mt-8']);
   
-  const backButton = createElement('button', [
-    'arcade-font', 'text-sm', 'text-neon-pink', 'hover:text-white',
-    'border-2', 'border-neon-pink', 'hover:bg-neon-pink', 'hover:text-arcade-darker',
-    'px-8', 'py-3', 'rounded-md', 'transition-all', 'duration-300', 'w-full', 'sm:w-auto'
-  ], '↩ Voltar');
-  backButton.addEventListener('click', () => {
-    window.history.back(); // Ou navegue para uma rota específica: window.location.hash = '#/';
+  tipsContent.appendChild(tipsList);
+  tipsSection.appendChild(tipsContent);
+  
+  contentWrapper.appendChild(tipsSection);
+  
+  // Navigation Buttons
+  const navButtons = document.createElement('div');
+  navButtons.className = 'flex justify-center gap-4 mt-10';
+  
+  const backButton = document.createElement('a');
+  backButton.href = '/';
+  backButton.className = 'px-4 py-2 border border-purple-500 rounded text-purple-400 hover:bg-purple-500/20 transition flex items-center';
+  
+  const backChevron = document.createElement('span');
+  backChevron.className = 'mr-2';
+  backChevron.textContent = '‹';
+  
+  backButton.appendChild(backChevron);
+  backButton.appendChild(document.createTextNode('Voltar'));
+  
+  const playButton = document.createElement('a');
+  playButton.href = '/game';
+  playButton.className = 'px-4 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 rounded text-white hover:opacity-90 transition flex items-center';
+  
+  const playIcon = document.createElement('span');
+  playIcon.className = 'mr-2';
+  playIcon.textContent = '▶';
+  
+  playButton.appendChild(playIcon);
+  playButton.appendChild(document.createTextNode('Jogar Agora'));
+  
+  navButtons.appendChild(backButton);
+  navButtons.appendChild(playButton);
+  
+  contentWrapper.appendChild(navButtons);
+  container.appendChild(contentWrapper);
+  
+  return container;
+}
+
+function createContentSection(title: string, paragraphs: string[]): HTMLElement {
+  const section = document.createElement('div');
+  section.className = 'bg-black/50 border border-purple-500/30 rounded-lg mb-8';
+  
+  const content = document.createElement('div');
+  content.className = 'p-6';
+  
+  const heading = document.createElement('h2');
+  heading.className = 'text-2xl font-bold mb-4 text-purple-400';
+  heading.textContent = title;
+  content.appendChild(heading);
+  
+  paragraphs.forEach((text, index) => {
+    const p = document.createElement('p');
+    p.className = 'text-gray-300' + (index < paragraphs.length - 1 ? ' mb-4' : '');
+    p.textContent = text;
+    content.appendChild(p);
   });
-
-  const playGameButton = createElement('button', [
-    'arcade-font', 'text-sm', 'text-arcade-darker',
-    'bg-neon-blue', 'hover:bg-opacity-80', 'border-2', 'border-neon-blue',
-    'px-8', 'py-3', 'rounded-md', 'transition-all', 'duration-300', 'w-full', 'sm:w-auto',
-    'flex', 'items-center', 'justify-center', 'gap-2'
-  ]);
-  // Ícone de Play (SVG)
-  const playIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
-                        <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
-                       </svg>`;
-  playGameButton.innerHTML = `${playIconSVG} Jogar Agora`;
-  playGameButton.addEventListener('click', () => {
-    window.location.hash = '#/'; // Ou a rota principal do jogo
-  });
-
-  actionsDiv.appendChild(backButton);
-  actionsDiv.appendChild(playGameButton);
-  sectionContainer.appendChild(actionsDiv);
-
-  return sectionContainer;
+  
+  section.appendChild(content);
+  return section;
 }
