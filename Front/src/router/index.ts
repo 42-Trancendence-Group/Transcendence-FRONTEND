@@ -1,12 +1,15 @@
 import { renderHome } from '../pages/HomePage';
 import { renderNotFound } from '../pages/NotFoundPage';
 import { renderLogin } from '../pages/LoginPage';
+import { renderHowToPlayPage } from '../pages/HowToPlayPage';
 
 // Definição das rotas disponíveis
 const routes: Record<string, () => void> = {
   '/': renderHome,
   '*': renderNotFound,
-  '/Login': renderLogin
+  '/Login': renderLogin,
+  '/ComoJogar': renderHowToPlayPage
+  
 };
 
 // Função para renderizar a página baseada na rota atual

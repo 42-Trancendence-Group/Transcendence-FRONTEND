@@ -52,7 +52,7 @@ export function createHero(): HTMLElement {
   const secondaryButton = document.createElement('button');
   secondaryButton.className = 'border-neon-blue text-neon-blue hover:bg-neon-blue hover:text-arcade-darker px-8 py-6 text-lg border rounded';
   secondaryButton.textContent = 'Como Jogar';
-  secondaryButton.addEventListener('click', () => navigateTo('/como-jogar'));
+  secondaryButton.addEventListener('click', () => navigateTo('/ComoJogar'));
   
   buttonContainer.appendChild(primaryButton);
   buttonContainer.appendChild(secondaryButton);
