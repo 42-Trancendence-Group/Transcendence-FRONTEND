@@ -155,6 +155,48 @@
   background: linear-gradient(60deg, #067a7a, #442f74, #853192);
 }
 
+.bgp-arcade-darkPurple {
+  /* Suas outras classes Tailwind (min-h-screen flex flex-col) */
+  position: relative; /* Essencial para posicionar o ::before */
+  overflow: hidden;   /* Essencial para cortar o ::before que é maior */
+  /* Cor de fundo de fallback, caso o gradiente não funcione ou demore */
+  background-color: #230a5c;
+  /* Garante que o conteúdo fique acima do pseudo-elemento */
+  z-index: 0;
+}
+
+.bgp-arcade-darkPurple::before {
+  content: "";
+  position: absolute;
+  top: -100%;  /* Metade do excesso de tamanho */
+  left: -100%; /* Metade do excesso de tamanho */
+  width: 300%;  /* Maior que o pai para cobrir durante a rotação */
+  height: 300%; /* Maior que o pai para cobrir durante a rotação */
+  z-index: -1;  /* Coloca o pseudo-elemento atrás do conteúdo do .bgp-arcade-darkPurple */
+
+  background: linear-gradient(
+    0deg, /* O ângulo aqui pode ser fixo, pois vamos rotacionar o pseudo-elemento */
+    #ff00ff,
+    #000000,
+    #000000
+  );
+  animation: rotatePseudoGradient 2s linear infinite;
+}
+
+/* Sua animação atual, mas agora ela rotaciona o ::before */
+@keyframes rotatePseudoGradient {
+0% {
+  transform: rotate(0deg);
+}
+100% {
+  transform: rotate(360deg);
+}
+}
+.bg-arcade-darker-creator{
+  background-color: #e100ff2d;
+
+}
+
 .text-neon-blue{
   color: #00FFFF;
   background-color: #000000;

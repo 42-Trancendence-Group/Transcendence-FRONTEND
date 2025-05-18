@@ -4,15 +4,10 @@ export function createHero(): HTMLElement {
   const heroSection = document.createElement('div');
   heroSection.className = 'relative py-12 md:py-24 overflow-hidden';
   
-  // Gradient overlay
-  const gradientOverlay = document.createElement('div');
-  gradientOverlay.className = 'absolute inset-0 bg-arcade-darker opacity-80 z-0';
-  
   // Grid overlay
   const gridOverlay = document.createElement('div');
   gridOverlay.className = 'absolute inset-0 z-0';
   gridOverlay.style.backgroundSize = '50px 50px';
-  gridOverlay.style.backgroundImage = 'linear-gradient(rgba(65, 0, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(65, 0, 255, 0.1) 1px)';
   gridOverlay.style.backgroundPosition = 'center center';
   
   // Content
@@ -160,7 +155,6 @@ export function createHero(): HTMLElement {
   content.appendChild(flexContainer);
   content.appendChild(featuresGrid);
   
-  heroSection.appendChild(gradientOverlay);
   heroSection.appendChild(gridOverlay);
   heroSection.appendChild(content);
   

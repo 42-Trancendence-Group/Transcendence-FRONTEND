@@ -11,7 +11,7 @@ export function renderHome(): void {
   
   // Cria a estrutura da página
   const container = document.createElement('div');
-  container.className = 'min-h-screen flex flex-col bg-arcade-dark';
+  container.className = 'min-h-screen flex flex-col bgp-arcade-darkPurple';
   
   // Adiciona os componentes
   container.appendChild(createNavbar());
