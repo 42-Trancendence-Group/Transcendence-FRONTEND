@@ -278,20 +278,127 @@ export function renderLoginForm(): HTMLElement {
   inputEmail.id = 'email';
   inputEmail.type = 'email';
   inputEmail.placeholder = 'seu-email@exemplo.com';
-  inputEmail.className = 'flex h-10 w-full rounded-md border border-neon-pink bg-arcade-dark px-3 pl-9 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-neon-green disabled:cursor-not-allowed disabled:opacity-50 md:text-sm text-white';
+  inputEmail.className = 'flex h-10 w-full rounded-md border border-neon-blue bg-arcade-dark px-3 pl-9 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-neon-green disabled:cursor-not-allowed disabled:opacity-50 md:text-sm text-white';
   inputEmail.required = true; // Para atributos booleanos como 'required', defina a propriedade como true.
-
+  
   // 7. Aninha o contêiner do ícone e o input no contêiner principal
   mainContainer.appendChild(iconContainer);
   mainContainer.appendChild(inputEmail);
-
+  
   contentEmail.appendChild(textEmail);
   contentEmail.appendChild(mainContainer);
   sectionEmail.appendChild(contentEmail);
+  
+  // Define o namespace SVG uma vez, se ainda não estiver definido
+  const svgNSp = "http://www.w3.org/2000/svg";
+
+  // 1. Cria o contêiner principal <div class="space-y-1">
+  const passwordSectionContainer = document.createElement('div');
+  passwordSectionContainer.className = 'space-y-1';
+
+  // 2. Cria o elemento <label for="password" class="text-sm text-gray-300">
+  const passwordLabel = document.createElement('label');
+  passwordLabel.htmlFor = 'password'; // Lembre-se de usar htmlFor
+  passwordLabel.className = 'text-sm text-gray-300';
+  passwordLabel.textContent = 'Senha';
+
+  // 3. Cria o <div class="relative"> que envolve o input e os ícones
+  const inputWrapper = document.createElement('div');
+  // inputWrapper.className = 'cFormSectionlass'; // Se a typo for intencional
+  inputWrapper.className = 'relative'; // Assumindo que era para ser 'relative'
+
+  // 4. Cria o contêiner do ícone de cadeado (à esquerda)
+  const lockIconContainer = document.createElement('div');
+  lockIconContainer.className = 'absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none';
+
+  // 4.1. Cria o SVG do ícone de cadeado
+  const lockSvgIcon = document.createElementNS(svgNSp, 'svg');
+  lockSvgIcon.setAttribute('xmlns', svgNSp);
+  lockSvgIcon.setAttribute('width', '16');
+  lockSvgIcon.setAttribute('height', '16');
+  lockSvgIcon.setAttribute('viewBox', '0 0 24 24');
+  lockSvgIcon.setAttribute('fill', 'none');
+  lockSvgIcon.setAttribute('stroke', 'Green');
+  lockSvgIcon.setAttribute('stroke-width', '2');
+  lockSvgIcon.setAttribute('stroke-linecap', 'round');
+  lockSvgIcon.setAttribute('stroke-linejoin', 'round');
+
+  // 4.1.1. Cria o <rect> para o ícone de cadeado
+  const lockSvgRect = document.createElementNS(svgNSp, 'rect');
+  lockSvgRect.setAttribute('width', '18');
+  lockSvgRect.setAttribute('height', '11');
+  lockSvgRect.setAttribute('x', '3');
+  lockSvgRect.setAttribute('y', '11');
+  lockSvgRect.setAttribute('rx', '2');
+  lockSvgRect.setAttribute('ry', '2');
+
+  // 4.1.2. Cria o <path> para o ícone de cadeado
+  const lockSvgPath = document.createElementNS(svgNSp, 'path');
+  lockSvgPath.setAttribute('d', 'M7 11V7a5 5 0 0 1 10 0v4');
+
+  // Aninha os elementos do SVG de cadeado
+  lockSvgIcon.appendChild(lockSvgRect);
+  lockSvgIcon.appendChild(lockSvgPath);
+  lockIconContainer.appendChild(lockSvgIcon); // Adiciona o SVG ao seu contêiner
+
+  // 5. Cria o elemento <input> de senha
+  const inputPassword = document.createElement('input');
+  inputPassword.id = 'password';
+  inputPassword.type = 'password';
+  inputPassword.placeholder = 'ººººººººº';
+  inputPassword.className = 'flex h-10 w-full rounded-md border border-neon-blue bg-arcade-dark px-3 pl-9 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-neon-green disabled:cursor-not-allowed disabled:opacity-50 md:text-sm text-white';
+  inputPassword.required = true;
+
+  // 6. Cria o contêiner do ícone de toggle (olho, à direita)
+  const togglePasswordContainer = document.createElement('div');
+  togglePasswordContainer.className = 'absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer';
+  togglePasswordContainer.id = 'toggle-password'; // Adiciona o ID para funcionalidade de clique
+
+  // 6.1. Cria o SVG do ícone de olho
+  const eyeSvgIcon = document.createElementNS(svgNSp, 'svg');
+  eyeSvgIcon.setAttribute('xmlns', svgNSp);
+  eyeSvgIcon.setAttribute('width', '16');
+  eyeSvgIcon.setAttribute('height', '16');
+  eyeSvgIcon.setAttribute('viewBox', '0 0 24 24');
+  eyeSvgIcon.setAttribute('fill', 'none');
+  eyeSvgIcon.setAttribute('stroke', 'green');
+  eyeSvgIcon.setAttribute('stroke-width', '2');
+  eyeSvgIcon.setAttribute('stroke-linecap', 'round');
+  eyeSvgIcon.setAttribute('stroke-linejoin', 'round');
+  
+
+  // 6.1.1. Cria o <path> para o ícone de olho
+  const eyeSvgPath = document.createElementNS(svgNSp, 'path');
+  eyeSvgPath.setAttribute('d', 'M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z');
+
+  // 6.1.2. Cria o <circle> para o ícone de olho
+  const eyeSvgCircle = document.createElementNS(svgNSp, 'circle');
+  eyeSvgCircle.setAttribute('cx', '12');
+  eyeSvgCircle.setAttribute('cy', '12');
+  eyeSvgCircle.setAttribute('r', '3');
+
+  // Aninha os elementos do SVG de olho
+  eyeSvgIcon.appendChild(eyeSvgPath);
+  eyeSvgIcon.appendChild(eyeSvgCircle);
+  togglePasswordContainer.appendChild(eyeSvgIcon); // Adiciona o SVG ao seu contêiner
+
+  // 7. Aninha os elementos dentro do inputWrapper
+  inputWrapper.appendChild(lockIconContainer);
+  inputWrapper.appendChild(inputPassword);
+  inputWrapper.appendChild(togglePasswordContainer);
+
+  // 8. Aninha a label e o inputWrapper no contêiner principal da seção
+  passwordSectionContainer.appendChild(passwordLabel);
+  passwordSectionContainer.appendChild(inputWrapper);
+
+  
+
 
 
   
   containerLogin.appendChild(sectionEmail);
+  containerLogin.appendChild(passwordSectionContainer);
+
   
   
   FormSection.appendChild(containerTitle);
