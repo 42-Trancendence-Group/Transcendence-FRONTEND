@@ -266,8 +266,8 @@ export class GameService {
 
     this.mockGameLoopInterval = window.setInterval(() => {
       // Simular movimento simples da bola
-      this.mockGameState.ball.x += 0.002 * (Math.random() > 0.5 ? 1 : -1) ; // Pequeno movimento horizontal aleatório
-      this.mockGameState.ball.y += 0.002 * (Math.random() > 0.5 ? 1 : -1) ; // Pequeno movimento vertical aleatório
+      this.mockGameState.ball.x += 0.025 * (Math.random() > 0.025 ? 1 : -1) ; // Pequeno movimento horizontal aleatório
+      this.mockGameState.ball.y += 0.025 * (Math.random() > 0.025 ? 1 : -1) ; // Pequeno movimento vertical aleatório
 
       // Manter a bola dentro dos limites (muito simplificado)
       if (this.mockGameState.ball.y < 0.01 || this.mockGameState.ball.y > 0.99) {

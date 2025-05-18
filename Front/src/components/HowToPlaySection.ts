@@ -156,7 +156,7 @@ export function createHowToPlaySection(): HTMLElement {
   backButton.appendChild(document.createTextNode('Voltar'));
   
   const playButton = document.createElement('a');
-  playButton.href = '/game';
+  playButton.href = '/Game';
   playButton.className = 'px-4 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 rounded text-white hover:opacity-90 transition flex items-center';
   
   const playIcon = document.createElement('span');
