@@ -69,7 +69,7 @@ export function createHero(): HTMLElement {
   const tableNet = document.createElement('div');
   tableNet.className = 'absolute inset-0 flex items-center justify-center';
   const net = document.createElement('div');
-  net.className = 'h-full w-1 bg-neon-green opacity-80';
+  net.className = 'h-full w-1 bg-neon-blue opacity-80';
   tableNet.appendChild(net);
   
   const ball = document.createElement('div');
@@ -78,7 +78,7 @@ export function createHero(): HTMLElement {
   ball.style.top = '40%';
   
   const leftPaddle = document.createElement('div');
-  leftPaddle.className = 'absolute h-16 w-2 bg-neon-blue left-4 top-1/2 -translate-y-1/2';
+  leftPaddle.className = 'absolute h-16 w-2 bg-neon-green left-4 top-1/2 -translate-y-1/2';
   
   const rightPaddle = document.createElement('div');
   rightPaddle.className = 'absolute h-16 w-2 bg-neon-pink right-4 top-1/2 -translate-y-1/2';

@@ -3,7 +3,7 @@ import { navigateTo } from '../router/index';
 
 export function createLeaderboardPreview(): HTMLElement {
   const section = document.createElement('section');
-  section.className = 'py-16 bg-arcade-darkPurple';
+  section.className = 'py-16 ';
   
   const container = document.createElement('div');
   container.className = 'container mx-auto px-6';
@@ -14,13 +14,7 @@ export function createLeaderboardPreview(): HTMLElement {
   
   const title = document.createElement('h2');
   title.className = 'text-3xl md:text-4xl font-bold mb-4 text-white';
-  title.innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" class="inline-block mr-2 text-neon-orange" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="8" r="6"/>
-      <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
-    </svg>
-    Top Jogadores
-  `;
+  title.innerHTML = `Top Jogadores `;
   
   const subtitle = document.createElement('p');
   subtitle.className = 'text-xl text-gray-300 max-w-3xl mx-auto';
@@ -34,7 +28,7 @@ export function createLeaderboardPreview(): HTMLElement {
   tableWrapper.className = 'max-w-3xl mx-auto';
   
   const tableContainer = document.createElement('div');
-  tableContainer.className = 'arcade-container bg-arcade-darker rounded-lg overflow-hidden border-2 border-neon-orange';
+  tableContainer.className = 'arcade-container bg-arcade-darker rounded-lg overflow-hidden border-2 border-neon-green';
   
   const table = document.createElement('table');
   table.className = 'w-full';
@@ -42,12 +36,12 @@ export function createLeaderboardPreview(): HTMLElement {
   // Table header
   const thead = document.createElement('thead');
   const headerRow = document.createElement('tr');
-  headerRow.className = 'border-neon-orange/50 hover:bg-transparent';
+  headerRow.className = 'border-neon-green/50 hover:bg-transparent';
   
   const headers = ['Rank', 'Jogador', 'V/D', 'Taxa de Vitória'];
   headers.forEach((headerText, index) => {
     const th = document.createElement('th');
-    th.className = 'text-neon-orange p-4 text-left';
+    th.className = 'text-neon-green p-4 text-left';
     if (index >= 2) th.className += ' text-right';
     th.textContent = headerText;
     headerRow.appendChild(th);
@@ -69,8 +63,8 @@ export function createLeaderboardPreview(): HTMLElement {
   topPlayers.forEach(player => {
     const row = document.createElement('tr');
     row.className = `
-      border-neon-orange/30 hover:bg-neon-orange/5 transition-colors
-      ${player.rank === 1 ? "bg-neon-orange/10" : ""}
+      border-neon-green/30 hover:bg-neon-green/5 transition-colors
+      ${player.rank === 1 ? "bg-neon-green/10" : ""}
     `;
     
     // Rank cell
@@ -78,7 +72,7 @@ export function createLeaderboardPreview(): HTMLElement {
     rankCell.className = 'font-medium p-4';
     if (player.rank === 1) {
       rankCell.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" class="inline mr-1 text-neon-orange" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" class="inline mr-1 text-neon-green" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="8" r="6"/>
           <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
         </svg>
@@ -96,7 +90,7 @@ export function createLeaderboardPreview(): HTMLElement {
     playerNameWrapper.className = 'flex items-center gap-2';
     
     const playerName = document.createElement('span');
-    playerName.className = player.rank <= 3 ? 'text-neon-orange' : 'text-white';
+    playerName.className = player.rank <= 3 ? 'text-neon-green' : 'text-white';
     playerName.textContent = player.username;
     
     playerNameWrapper.appendChild(playerName);
@@ -110,7 +104,7 @@ export function createLeaderboardPreview(): HTMLElement {
       for (let i = 0; i < starsCount; i++) {
         const star = document.createElement('span');
         star.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" class="text-neon-orange" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" class="text-neon-green" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
         `;
@@ -124,12 +118,12 @@ export function createLeaderboardPreview(): HTMLElement {
     
     // W/L cell
     const wlCell = document.createElement('td');
-    wlCell.className = 'text-right p-4';
-    wlCell.textContent = `${player.wins}/${player.losses}`;
+    wlCell.className = 'text-right p-4 text-white';
+    wlCell.textContent = `${player.wins}/${player.losses} `;
     
     // Win rate cell
     const winRateCell = document.createElement('td');
-    winRateCell.className = `text-right p-4 ${player.rank === 1 ? "text-neon-orange" : "text-white"}`;
+    winRateCell.className = `text-right p-4 ${player.rank === 1 ? "text-neon-green" : "text-white"}`;
     winRateCell.textContent = player.winRate;
     
     // Add cells to row
@@ -151,7 +145,7 @@ export function createLeaderboardPreview(): HTMLElement {
   buttonContainer.className = 'flex justify-center mt-8';
   
   const viewMoreButton = document.createElement('button');
-  viewMoreButton.className = 'border-neon-orange text-neon-orange hover:bg-neon-orange hover:text-arcade-darker border px-4 py-2 rounded';
+  viewMoreButton.className = 'border-neon-green text-neon-green hover:bg-neon-green hover:text-arcade-darker border px-4 py-2 rounded';
   viewMoreButton.textContent = 'Ver Ranking Completo';
   viewMoreButton.addEventListener('click', () => navigateTo('/rankings'));
   

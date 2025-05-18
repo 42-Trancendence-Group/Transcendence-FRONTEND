@@ -1,409 +1,507 @@
-import { showToast } from '../utils/toast'; // Supondo que você tenha este utilitário
+// src/components/FormLogin.ts
+import { showToast } from '../utils/toast';
 
-// function createFormLoginHTML(): string {
-//   // O HTML do formulário que você tinha em LoginPage.ts, mas APENAS o <form> e seus elementos internos.
-//   // Remova as divs externas de layout da página (min-h-screen, etc.) e a navbar/footer.
-//   return `
-//     <div class="w-full max-w-md border-neon-blue bg-arcade-darker relative overflow-hidden rounded-md p-6">
-//       <!-- Decorative background effects -->
-//       <div class="absolute inset-0 bg-arcade-grid opacity-20 pointer-events-none"></div>
-//       <div class="absolute -top-24 -right-24 w-48 h-48 bg-neon-pink rounded-full filter blur-3xl opacity-20 animate-pulse-neon"></div>
-//       <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-neon-blue rounded-full filter blur-3xl opacity-20 animate-pulse-neon"></div>
-      
-//       <div class="relative">
-//         <div class="text-2xl font-bold text-center text-white neon-text">
-//           Acessar sua Conta
-//         </div>
-//         <div class="text-center text-gray-300 mb-6">
-//           Entre com seus dados para acessar a arena
-//         </div>
-//       </div>
-      
-//       <div class="relative">
-//         <form id="login-form" class="space-y-4">
-//           <div class="space-y-1">
-//             <label for="email" class="text-sm text-gray-300">
-//               Email
-//             </label>
-//             <div class="relative">
-//               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-//                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-//               </div>
-//               <input
-//                 id="email"
-//                 type="email"
-//                 placeholder="seu-email@exemplo.com"
-//                 class="flex h-10 w-full rounded-md border border-neon-blue/50 bg-arcade-dark px-3 pl-9 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-neon-green disabled:cursor-not-allowed disabled:opacity-50 md:text-sm text-white"
-//                 required
-//               />
-//             </div>
-//           </div>
-          
-//           <div class="space-y-1">
-//             <label for="password" class="text-sm text-gray-300">
-//               Senha
-//             </label>
-//             <div cFormSectionlass="relative">
-//               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-//                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-//               </div>
-//               <input
-//                 id="password"
-//                 type="password"
-//                 placeholder="ººººººººº"
-//                 class="flex h-10 w-full rounded-md border border-neon-blue/50 bg-arcade-dark px-3 pl-9 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-neon-green disabled:cursor-not-allowed disabled:opacity-50 md:text-sm text-white"
-//                 required
-//               />
-//               <div
-//                 class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-//                 id="toggle-password"
-//               >
-//                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 hover:text-white eye-icon"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-//               </div>
-//             </div>
-//           </div>
-          
-//           <div class="flex items-center justify-between">
-//             <div class="flex items-center space-x-2">
-//               <input
-//                 id="remember"
-//                 type="checkbox"
-//                 class="h-4 w-4 border border-neon-blue/50 bg-arcade-dark rounded"
-//               />
-//               <label
-//                 for="remember"
-//                 class="text-sm text-gray-300 cursor-pointer"
-//               >
-//                 Lembrar de mim
-//               </label>
-//             </div>
-            
-//             <a
-//               href="data-spa-link <!-- Adicionado data-spa-link -->
-//               class="text-sm text-neon-blue hover:text-neon-green transition-colors"
-//             >
-//               Esqueceu a senha?
-//             </a>
-//           </div>
-          
-//           <button
-//             type="submit"
-//             class="w-full bg-neon-blue hover:bg-neon-green text-black font-bold transition-all duration-300 py-2 rounded-md h-10"
-//           >
-//             Entrar
-//           </button>
-          
-//           <div class="relative flex items-center justify-center">
-//             <div class="h-px bg-gray-600 flex-grow"></div>
-//             <div class="px-4 text-sm text-gray-400">ou continue com</div>
-//             <div class="h-px bg-gray-600 flex-grow"></div>
-//           </div>
-          
-//           <div class="grid g gap-3">
-//             <button
-//               type="button"
-//               class="border-neon-pink/50 hover:border-neon-pink hover:bg-neon-pink/10 text-white border rounded-md py-2 h-10"
-//               id="login-google"
-//             >
-//               Google
-//             </button>
-//           </div>
-//         </form>
-//       </div>
-      
-//       <div class="flex flex-col space-y-4 items-center justify-center mt-6">
-//         <div class="text-sm text-gray-300">
-//           Não possui uma conta?
-//           <a
-//             href=' data-spa-link <!-- Adicionado data-spa-link -->
-//             class="text-neon-pink hover:text-neon-purple transition-colors font-medium"
-//           >
-//             Registre-se
-//           </a>
-//         </div>
-//       </div>
-//     </div>
-//   `;
-// }
+// Interface para tipagem do componente
+interface FormLoginConfig {
+  parentElement?: HTMLElement;
+  onLoginSuccess?: () => void;
+  onLoginError?: (error: string) => void;
+}
 
-// function setupFormInteractions(): void {
-//   // A mesma lógica de setupLoginPageInteractions que você tinha,
-//   // mas agora focada apenas nos elementos DENTRO do formulário.
-//   const togglePassword = document.getElementById('toggle-password');
-//   const passwordInput = document.getElementById('password');
-  
-//   togglePassword?.addEventListener('click', () => {
-//     if (passwordInput instanceof HTMLInputElement) {
-//       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-//       passwordInput.setAttribute('type', type);
-      
-//       const eyeIcon = togglePassword.querySelector('.eye-icon');
-//       if (eyeIcon) {
-//         if (type === 'password') {
-//           eyeIcon.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle>';
-//         } else {
-//           eyeIcon.innerHTML = '<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" x2="22" y1="2" y2="22"></line>';
-//         }
-//       }
-//     }
-//   });
+// Classe principal do componente
+export class FormLogin {
+  private formElement: HTMLDivElement;
+  private emailInput: HTMLInputElement;
+  private passwordInput: HTMLInputElement;
+  private togglePasswordButton: HTMLDivElement;
+  private loginForm: HTMLFormElement;
 
-//   const loginForm = document.getElementById('login-form');
-//   loginForm?.addEventListener('submit', (e) => {
-//     e.preventDefault();
-//     const email = (document.getElementById('email') as HTMLInputElement)?.value;
-//     const password = (document.getElementById('password') as HTMLInputElement)?.value;
+  constructor(private config: FormLoginConfig = {}) {
+    this.formElement = this.createFormStructure();
+    this.setupEventListeners();
+  }
+
+  // Método para renderizar o formulário
+  public render(): HTMLElement {
+    return this.formElement;
+  }
+
+  // Cria a estrutura base do formulário
+  private createFormStructure(): HTMLDivElement {
+    const formContainer = document.createElement('div');
+    formContainer.className = 'w-full max-w-md border-neon-blue bg-arcade-darker relative overflow-hidden rounded-md p-6';
+
+    // Adiciona elementos decorativos
+    this.addDecorativeElements(formContainer);
+
+    // Adiciona título e subtítulo
+    this.addFormHeader(formContainer);
+
+    // Cria o formulário principal
+    this.loginForm = this.createLoginForm();
+    formContainer.appendChild(this.loginForm);
+
+    // Adiciona footer com link para registro
+    this.addFormFooter(formContainer);
+
+    return formContainer;
+  }
+
+  // Adiciona elementos decorativos de fundo
+  private addDecorativeElements(container: HTMLElement): void {
+    const decorators = [
+      { className: 'absolute inset-0 bg-arcade-grid opacity-20 pointer-events-none' },
+      { className: 'absolute -top-24 -right-24 w-48 h-48 bg-neon-pink rounded-full filter blur-3xl opacity-20 animate-pulse-neon' },
+      { className: 'absolute -bottom-24 -left-24 w-48 h-48 bg-neon-blue rounded-full filter blur-3xl opacity-20 animate-pulse-neon' }
+    ];
+
+    decorators.forEach(decor => {
+      const element = document.createElement('div');
+      element.className = decor.className;
+      container.appendChild(element);
+    });
+  }
+
+  // Adiciona cabeçalho do formulário
+  private addFormHeader(container: HTMLElement): void {
+    const headerContainer = document.createElement('div');
+    headerContainer.className = 'relative mb-6';
+
+    const title = document.createElement('h2');
+    title.className = 'text-2xl font-bold text-center text-white neon-text';
+    title.textContent = 'Acessar sua Conta';
+
+    const subtitle = document.createElement('p');
+    subtitle.className = 'text-center text-gray-300';
+    subtitle.textContent = 'Entre com seus dados para acessar a arena';
+
+    headerContainer.appendChild(title);
+    headerContainer.appendChild(subtitle);
+    container.appendChild(headerContainer);
+  }
+
+  // Cria o formulário de login
+  private createLoginForm(): HTMLFormElement {
+    const form = document.createElement('form');
+    form.id = 'login-form';
+    form.className = 'space-y-4';
+
+    // Adiciona campo de email
+    form.appendChild(this.createEmailInput());
+
+    // Adiciona campo de senha
+    form.appendChild(this.createPasswordInput());
+
+    // Adiciona lembrar senha e esqueci senha
+    form.appendChild(this.createRememberForgotSection());
+
+    // Adiciona botão de submit
+    form.appendChild(this.createSubmitButton());
+
+    // Adiciona divisão "ou continue com"
+    form.appendChild(this.createDivider());
+
+
+    return form;
+  }
+
+  // Cria campo de email
+  private createEmailInput(): HTMLElement {
+    const container = document.createElement('div');
+    container.className = 'space-y-1';
+
+    const label = document.createElement('label');
+    label.htmlFor = 'email';
+    label.className = 'text-sm text-gray-300';
+    label.textContent = 'Email';
+
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'relative';
+
+    // Ícone de email
+    const emailIcon = this.createSvgIcon('email');
+    inputContainer.appendChild(emailIcon);
+
+    // Input de email
+    this.emailInput = document.createElement('input');
+    this.emailInput.id = 'email';
+    this.emailInput.type = 'email';
+    this.emailInput.placeholder = 'seu-email@exemplo.com';
+    this.emailInput.className = 'flex h-10 w-full rounded-md border border-neon-blue bg-arcade-dark px-3 pl-9 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:outline-none focus:border-neon-green disabled:cursor-not-allowed disabled:opacity-50 md:text-sm text-white';
+    this.emailInput.required = true;
+
+    inputContainer.appendChild(this.emailInput);
+    container.appendChild(label);
+    container.appendChild(inputContainer);
+
+    return container;
+  }
+
+  // Cria campo de senha
+  private createPasswordInput(): HTMLElement {
+    const container = document.createElement('div');
+    container.className = 'space-y-1';
+
+    const label = document.createElement('label');
+    label.htmlFor = 'password';
+    label.className = 'text-sm text-gray-300';
+    label.textContent = 'Senha';
+
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'relative';
+
+    // Ícone de cadeado
+    const lockIcon = this.createSvgIcon('lock');
+    inputContainer.appendChild(lockIcon);
+
+    // Input de senha
+    this.passwordInput = document.createElement('input');
+    this.passwordInput.id = 'password';
+    this.passwordInput.type = 'password';
+    this.passwordInput.placeholder = '••••••••';
+    this.passwordInput.className = 'flex h-10 w-full rounded-md border border-neon-blue bg-arcade-dark px-3 pl-9 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:outline-none focus:border-neon-green disabled:cursor-not-allowed disabled:opacity-50 md:text-sm text-white';
+    this.passwordInput.required = true;
+
+    // Botão para mostrar/esconder senha
+    this.togglePasswordButton = document.createElement('div');
+    this.togglePasswordButton.className = 'absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer';
+    this.togglePasswordButton.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 hover:text-white eye-icon">
+        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+    `;
+
+    inputContainer.appendChild(this.passwordInput);
+    inputContainer.appendChild(this.togglePasswordButton);
+    container.appendChild(label);
+    container.appendChild(inputContainer);
+
+    return container;
+  }
+
+  // Cria seção "Lembrar de mim" e "Esqueceu a senha"
+  private createRememberForgotSection(): HTMLElement {
+    const container = document.createElement('div');
+    container.className = 'flex items-center justify-between';
+
+    // Checkbox "Lembrar de mim"
+    const rememberContainer = document.createElement('div');
+    rememberContainer.className = 'flex items-center space-x-2';
+
+    const checkbox = document.createElement('input');
+    checkbox.id = 'remember';
+    checkbox.type = 'checkbox';
+    checkbox.className = 'h-4 w-4 border border-neon-blue/50 bg-arcade-dark rounded';
+
+    const checkboxLabel = document.createElement('label');
+    checkboxLabel.htmlFor = 'remember';
+    checkboxLabel.className = 'text-sm text-gray-300 cursor-pointer';
+    checkboxLabel.textContent = 'Lembrar de mim';
+
+    rememberContainer.appendChild(checkbox);
+    rememberContainer.appendChild(checkboxLabel);
+
+    // Link "Esqueceu a senha"
+    const forgotLink = document.createElement('a');
+    forgotLink.href = '#forgot-password';
+    forgotLink.className = 'text-sm text-neon-blue hover:text-neon-green transition-colors';
+    forgotLink.textContent = 'Esqueceu a senha?';
+
+    container.appendChild(rememberContainer);
+    container.appendChild(forgotLink);
+
+    return container;
+  }
+
+  private createSubmitButton(): HTMLButtonElement {
+    const button = document.createElement('button');
+    button.type = 'submit';
+    button.className = 'w-full bg-neon-blue hover:bg-neon-green text-black font-bold transition-all duration-300 py-2 rounded-md h-10';
+    button.textContent = 'Entrar';
     
-//     if (email && password) {
-//       showToast('Login bem-sucedido!', 'success');
-//       // Em uma aplicação real, você faria uma chamada de API aqui
-//       // e o redirecionamento seria feito pelo router ou após sucesso da API.
-//       setTimeout(() => {
-//         window.location.hash = '#/'; // Use o router da SPA
-//       }, 1000);
-//     } else {
-//       showToast('Por favor, preencha todos os campos!', 'error');
-//     }
-//   });
+    // Adiciona evento de loading durante a requisição
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.handleLogin(button);
+    });
+    
+    return button;
+  }
 
- 
-// }
+  private async handleLogin(button: HTMLButtonElement): Promise<void> {
+    const email = this.emailInput.value;
+    const password = this.passwordInput.value;
 
-// /**
-//  * Cria e renderiza o componente do formulário de login em um container pai.
-//  * @param parentElement O elemento HTML onde o formulário será renderizado.
-//  */
-// // Em FormLogin.ts
-// export function renderLoginForm(parentElement: HTMLElement): void {
-//   parentElement.innerHTML = createFormLoginHTML();
-//   setupFormInteractions();
-// }
+    if (!email || !password) {
+      showToast('Por favor, preencha todos os campos!', 'error');
+      return;
+    }
 
-export function renderLoginForm(): HTMLElement {
+    // Mostra estado de loading
+    button.disabled = true;
+    button.innerHTML = '<span class="loading-spinner"></span>';
 
-  const FormSection = document.createElement('div');
-  FormSection.className = 'w-full max-w-md border-neon-blue bg-arcade-darker relative overflow-hidden rounded-md p-6';
+    try {
+      // 1. Fazer login inicial
+      const loginResponse = await this.sendLoginRequest(email, password);
+      
+      // 2. Verificar se precisa de 2FA
+      if (loginResponse.requires2FA) {
+        this.show2FAPopup();
+      } else {
+        this.config.onLoginSuccess?.(loginResponse.token);
+      }
+    } catch (error) {
+      this.config.onLoginError?.(error instanceof Error ? error.message : 'Erro desconhecido');
+    } finally {
+      // Restaura o botão
+      button.disabled = false;
+      button.textContent = 'Entrar';
+    }
+  }
 
-  //Decorative background effects
-  const gridOverlay = document.createElement('div');
-  gridOverlay.className = 'absolute inset-0 bg-arcade-grid opacity-20 pointer-events-none';
-  
-  const NeonPink = document.createElement('div');
-  NeonPink.className = 'absolute -top-24 -right-24 w-48 h-48 bg-neon-pink rounded-full filter blur-3xl opacity-20 animate-pulse-neon';
-  
-  const NoenBlue = document.createElement('div');
-  NoenBlue.className = 'absolute -bottom-24 -left-24 w-48 h-48 bg-neon-blue rounded-full filter blur-3xl opacity-20 animate-pulse-neon';
-  
-  FormSection.appendChild(gridOverlay);
-  FormSection.appendChild(NeonPink );
-  FormSection.appendChild(NoenBlue );
+  private async sendLoginRequest(email: string, password: string): Promise<{ requires2FA: boolean; token?: string }> {
+    const response = await fetch('http://localhost:4000/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    console.log(JSON.stringify({ email, password }))
 
-  const containerTitle = document.createElement('div');
-  containerTitle.className = 'relative'
+    if (!response.ok) {
+      throw new Error('Credenciais inválidas');
+    }
 
-  const sectionTitle = document.createElement('div');
-  sectionTitle.className = 'text-2xl font-bold text-center text-white neon-text';
-  
-  const title = document.createElement('h2');
-  title.className = 'text-2xl font-bold text-white neon-text ';
-  title.innerHTML = `Acessar sua Conta`;
-  
-  sectionTitle.appendChild(title);
+    return await response.json();
+  }
 
-  const subTitle = document.createElement('div');
-  subTitle.className ='text-center text-gray-300 mb-6';
-  subTitle.textContent = 'Entre com seus dados para acessar a arena';
+  private show2FAPopup(): void {
+    // Cria overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
 
-  containerTitle.appendChild(sectionTitle);
-  containerTitle.appendChild(subTitle);
+    // Cria popup
+    const popup = document.createElement('div');
+    popup.className = 'bg-arcade-darker border-neon-blue border-2 rounded-lg p-6 w-full max-w-md relative';
 
-  
-  const  containerLogin = document.createElement('div');
-  containerLogin.className = 'relative';
-  
-  const sectionEmail = document.createElement('form');
- 
+    // Título
+    const title = document.createElement('h3');
+    title.className = 'text-xl font-bold text-white neon-text mb-4';
+    title.textContent = 'Verificação em Duas Etapas';
 
-  const contentEmail = document.createElement('div');
-  contentEmail.className = 'space-y-1'
+    // Input do código
+    const codeInput = document.createElement('input');
+    codeInput.type = 'text';
+    codeInput.placeholder = 'Digite seu código 2FA';
+    codeInput.className = 'w-full bg-arcade-dark border-neon-blue border rounded-md px-4 py-2 text-white mb-4';
 
-  const textEmail = document.createElement('label');
-  textEmail.htmlFor = 'Email';
-  textEmail.className = 'text-sm text-gray-300';
-  textEmail.textContent = 'Email';
+    // Botão de enviar
+    const submitButton = document.createElement('button');
+    submitButton.className = 'w-full bg-neon-blue hover:bg-neon-green text-black font-bold py-2 rounded-md';
+    submitButton.textContent = 'Enviar';
 
-  // 1. Cria o contêiner principal <div class="relative">
-  const mainContainer = document.createElement('div');
-  mainContainer.className = 'relative';
+    // Evento de envio do código 2FA
+    submitButton.addEventListener('click', async () => {
+      const code = codeInput.value.trim();
+      if (!code) {
+        showToast('Por favor, digite o código 2FA', 'error');
+        return;
+      }
 
-  // 2. Cria o contêiner do ícone <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-  const iconContainer = document.createElement('div');
-  iconContainer.className = 'absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none';
+      submitButton.disabled = true;
+      submitButton.innerHTML = '<span class="loading-spinner"></span>';
 
-  // 3. Cria o elemento SVG
-  // Para elementos SVG, é mais correto usar createElementNS para especificar o namespace SVG.
-  const svgNS = "http://www.w3.org/2000/svg";
-  const svgIcon = document.createElementNS(svgNS, 'svg');
-  svgIcon.setAttribute('xmlns', svgNS); // Embora createElementNS já defina, é bom ser explícito.
-  svgIcon.setAttribute('width', '16');
-  svgIcon.setAttribute('height', '16');
-  svgIcon.setAttribute('viewBox', '0 0 24 24');
-  svgIcon.setAttribute('fill', 'none');
-  svgIcon.setAttribute('stroke', 'green');
-  svgIcon.setAttribute('stroke-width', '2');
-  svgIcon.setAttribute('stroke-linecap', 'round');
-  svgIcon.setAttribute('stroke-linejoin', 'round');
+      try {
+        await this.verify2FACode(code);
+        overlay.remove();
+        this.config.on2FASuccess?.();
+      } catch (error) {
+        showToast('Código inválido', 'error');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Enviar';
+      }
+    });
 
-  // 3.1. Cria o elemento <rect> dentro do SVG
-  const svgRect = document.createElementNS(svgNS, 'rect');
-  svgRect.setAttribute('width', '20');
-  svgRect.setAttribute('height', '16');
-  svgRect.setAttribute('x', '2');
-  svgRect.setAttribute('y', '4');
-  svgRect.setAttribute('rx', '2');
+    // Monta a estrutura
+    popup.appendChild(title);
+    popup.appendChild(codeInput);
+    popup.appendChild(submitButton);
+    overlay.appendChild(popup);
 
-  // 3.2. Cria o elemento <path> dentro do SVG
-  const svgPath = document.createElementNS(svgNS, 'path');
-  svgPath.setAttribute('d', 'm22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7');
+    // Adiciona ao body
+    document.body.appendChild(overlay);
 
-  // 4. Aninha os elementos do SVG
-  svgIcon.appendChild(svgRect);
-  svgIcon.appendChild(svgPath);
+    // Fecha ao clicar fora
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        overlay.remove();
+      }
+    });
+  }
 
-  // 5. Aninha o SVG no seu contêiner
-  iconContainer.appendChild(svgIcon);
+  private async verify2FACode(code: string): Promise<void> {
+    const response = await fetch('http://localhost:4000/auth/2fa/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ code }),
+    });
 
-  // 6. Cria o elemento <input>
-  const inputEmail = document.createElement('input');
-  inputEmail.id = 'email';
-  inputEmail.type = 'email';
-  inputEmail.placeholder = 'seu-email@exemplo.com';
-  inputEmail.className = 'flex h-10 w-full rounded-md border border-neon-blue bg-arcade-dark px-3 pl-9 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-neon-green disabled:cursor-not-allowed disabled:opacity-50 md:text-sm text-white';
-  inputEmail.required = true; // Para atributos booleanos como 'required', defina a propriedade como true.
-  
-  // 7. Aninha o contêiner do ícone e o input no contêiner principal
-  mainContainer.appendChild(iconContainer);
-  mainContainer.appendChild(inputEmail);
-  
-  contentEmail.appendChild(textEmail);
-  contentEmail.appendChild(mainContainer);
-  sectionEmail.appendChild(contentEmail);
-  
-  // Define o namespace SVG uma vez, se ainda não estiver definido
-  const svgNSp = "http://www.w3.org/2000/svg";
+    if (!response.ok) {
+      throw new Error('Código inválido');
+    }
 
-  // 1. Cria o contêiner principal <div class="space-y-1">
-  const passwordSectionContainer = document.createElement('div');
-  passwordSectionContainer.className = 'space-y-1';
-
-  // 2. Cria o elemento <label for="password" class="text-sm text-gray-300">
-  const passwordLabel = document.createElement('label');
-  passwordLabel.htmlFor = 'password'; // Lembre-se de usar htmlFor
-  passwordLabel.className = 'text-sm text-gray-300';
-  passwordLabel.textContent = 'Senha';
-
-  // 3. Cria o <div class="relative"> que envolve o input e os ícones
-  const inputWrapper = document.createElement('div');
-  // inputWrapper.className = 'cFormSectionlass'; // Se a typo for intencional
-  inputWrapper.className = 'relative'; // Assumindo que era para ser 'relative'
-
-  // 4. Cria o contêiner do ícone de cadeado (à esquerda)
-  const lockIconContainer = document.createElement('div');
-  lockIconContainer.className = 'absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none';
-
-  // 4.1. Cria o SVG do ícone de cadeado
-  const lockSvgIcon = document.createElementNS(svgNSp, 'svg');
-  lockSvgIcon.setAttribute('xmlns', svgNSp);
-  lockSvgIcon.setAttribute('width', '16');
-  lockSvgIcon.setAttribute('height', '16');
-  lockSvgIcon.setAttribute('viewBox', '0 0 24 24');
-  lockSvgIcon.setAttribute('fill', 'none');
-  lockSvgIcon.setAttribute('stroke', 'Green');
-  lockSvgIcon.setAttribute('stroke-width', '2');
-  lockSvgIcon.setAttribute('stroke-linecap', 'round');
-  lockSvgIcon.setAttribute('stroke-linejoin', 'round');
-
-  // 4.1.1. Cria o <rect> para o ícone de cadeado
-  const lockSvgRect = document.createElementNS(svgNSp, 'rect');
-  lockSvgRect.setAttribute('width', '18');
-  lockSvgRect.setAttribute('height', '11');
-  lockSvgRect.setAttribute('x', '3');
-  lockSvgRect.setAttribute('y', '11');
-  lockSvgRect.setAttribute('rx', '2');
-  lockSvgRect.setAttribute('ry', '2');
-
-  // 4.1.2. Cria o <path> para o ícone de cadeado
-  const lockSvgPath = document.createElementNS(svgNSp, 'path');
-  lockSvgPath.setAttribute('d', 'M7 11V7a5 5 0 0 1 10 0v4');
-
-  // Aninha os elementos do SVG de cadeado
-  lockSvgIcon.appendChild(lockSvgRect);
-  lockSvgIcon.appendChild(lockSvgPath);
-  lockIconContainer.appendChild(lockSvgIcon); // Adiciona o SVG ao seu contêiner
-
-  // 5. Cria o elemento <input> de senha
-  const inputPassword = document.createElement('input');
-  inputPassword.id = 'password';
-  inputPassword.type = 'password';
-  inputPassword.placeholder = 'ººººººººº';
-  inputPassword.className = 'flex h-10 w-full rounded-md border border-neon-blue bg-arcade-dark px-3 pl-9 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-neon-green disabled:cursor-not-allowed disabled:opacity-50 md:text-sm text-white';
-  inputPassword.required = true;
-
-  // 6. Cria o contêiner do ícone de toggle (olho, à direita)
-  const togglePasswordContainer = document.createElement('div');
-  togglePasswordContainer.className = 'absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer';
-  togglePasswordContainer.id = 'toggle-password'; // Adiciona o ID para funcionalidade de clique
-
-  // 6.1. Cria o SVG do ícone de olho
-  const eyeSvgIcon = document.createElementNS(svgNSp, 'svg');
-  eyeSvgIcon.setAttribute('xmlns', svgNSp);
-  eyeSvgIcon.setAttribute('width', '16');
-  eyeSvgIcon.setAttribute('height', '16');
-  eyeSvgIcon.setAttribute('viewBox', '0 0 24 24');
-  eyeSvgIcon.setAttribute('fill', 'none');
-  eyeSvgIcon.setAttribute('stroke', 'green');
-  eyeSvgIcon.setAttribute('stroke-width', '2');
-  eyeSvgIcon.setAttribute('stroke-linecap', 'round');
-  eyeSvgIcon.setAttribute('stroke-linejoin', 'round');
+    const data = await response.json();
+    this.config.onLoginSuccess?.(data.token);
+  }
   
 
-  // 6.1.1. Cria o <path> para o ícone de olho
-  const eyeSvgPath = document.createElementNS(svgNSp, 'path');
-  eyeSvgPath.setAttribute('d', 'M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z');
+  // Cria divisão "ou continue com"
+  private createDivider(): HTMLElement {
+    const container = document.createElement('div');
+    container.className = 'relative flex items-center justify-center';
 
-  // 6.1.2. Cria o <circle> para o ícone de olho
-  const eyeSvgCircle = document.createElementNS(svgNSp, 'circle');
-  eyeSvgCircle.setAttribute('cx', '12');
-  eyeSvgCircle.setAttribute('cy', '12');
-  eyeSvgCircle.setAttribute('r', '3');
+    const line1 = document.createElement('div');
+    line1.className = 'h-px bg-gray-600 flex-grow';
 
-  // Aninha os elementos do SVG de olho
-  eyeSvgIcon.appendChild(eyeSvgPath);
-  eyeSvgIcon.appendChild(eyeSvgCircle);
-  togglePasswordContainer.appendChild(eyeSvgIcon); // Adiciona o SVG ao seu contêiner
+    const text = document.createElement('div');
+    text.className = 'px-4 text-sm text-gray-400';
+    text.textContent = 'ou continue com';
 
-  // 7. Aninha os elementos dentro do inputWrapper
-  inputWrapper.appendChild(lockIconContainer);
-  inputWrapper.appendChild(inputPassword);
-  inputWrapper.appendChild(togglePasswordContainer);
+    const line2 = document.createElement('div');
+    line2.className = 'h-px bg-gray-600 flex-grow';
 
-  // 8. Aninha a label e o inputWrapper no contêiner principal da seção
-  passwordSectionContainer.appendChild(passwordLabel);
-  passwordSectionContainer.appendChild(inputWrapper);
+    container.appendChild(line1);
+    container.appendChild(text);
+    container.appendChild(line2);
 
-  
+    return container;
+  }
 
 
+  // Adiciona footer do formulário
+  private addFormFooter(container: HTMLElement): void {
+    const footer = document.createElement('div');
+    footer.className = 'flex flex-col space-y-4 items-center justify-center mt-6';
 
-  
-  containerLogin.appendChild(sectionEmail);
-  containerLogin.appendChild(passwordSectionContainer);
+    const text = document.createElement('p');
+    text.className = 'text-sm text-gray-300';
+    text.innerHTML = 'Não possui uma conta? <a href="#register" class="text-neon-pink hover:text-neon-purple transition-colors font-medium">Registre-se</a>';
 
-  
-  
-  FormSection.appendChild(containerTitle);
-  FormSection.appendChild(containerLogin);
-  
-  return FormSection
-  
+    footer.appendChild(text);
+    container.appendChild(footer);
+  }
+
+  // Factory method para criar ícones SVG
+  private createSvgIcon(type: 'email' | 'lock'): HTMLElement {
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const container = document.createElement('div');
+    container.className = 'absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none';
+
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('xmlns', svgNS);
+    svg.setAttribute('width', '16');
+    svg.setAttribute('height', '16');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('class', 'text-gray-400');
+
+    if (type === 'email') {
+      const rect = document.createElementNS(svgNS, 'rect');
+      rect.setAttribute('width', '20');
+      rect.setAttribute('height', '16');
+      rect.setAttribute('x', '2');
+      rect.setAttribute('y', '4');
+      rect.setAttribute('rx', '2');
+
+      const path = document.createElementNS(svgNS, 'path');
+      path.setAttribute('d', 'm22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7');
+
+      svg.appendChild(rect);
+      svg.appendChild(path);
+    } else if (type === 'lock') {
+      const rect = document.createElementNS(svgNS, 'rect');
+      rect.setAttribute('width', '18');
+      rect.setAttribute('height', '11');
+      rect.setAttribute('x', '3');
+      rect.setAttribute('y', '11');
+      rect.setAttribute('rx', '2');
+      rect.setAttribute('ry', '2');
+
+      const path = document.createElementNS(svgNS, 'path');
+      path.setAttribute('d', 'M7 11V7a5 5 0 0 1 10 0v4');
+
+      svg.appendChild(rect);
+      svg.appendChild(path);
+    }
+
+    container.appendChild(svg);
+    return container;
+  }
+
+  // Configura os event listeners
+  private setupEventListeners(): void {
+    // Toggle password visibility
+    this.togglePasswordButton.addEventListener('click', () => {
+      const type = this.passwordInput.type === 'password' ? 'text' : 'password';
+      this.passwordInput.type = type;
+      
+      const eyeIcon = this.togglePasswordButton.querySelector('.eye-icon');
+      if (eyeIcon) {
+        if (type === 'password') {
+          eyeIcon.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle>';
+        } else {
+          eyeIcon.innerHTML = '<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" x2="22" y1="2" y2="22"></line>';
+        }
+      }
+    });
+
+    // Form submission
+    this.loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.handleLogin();
+    });
+
+    // Google login button
+    const googleButton = this.formElement.querySelector('#login-google');
+    googleButton?.addEventListener('click', () => {
+      this.handleGoogleLogin();
+    });
+  }
+
+  // Manipula o login normal
+  private handleLogin(): void {
+    const email = this.emailInput.value;
+    const password = this.passwordInput.value;
+    
+    if (email && password) {
+      showToast('Login bem-sucedido!', 'success');
+      this.config.onLoginSuccess?.();
+    } else {
+      showToast('Por favor, preencha todos os campos!', 'error');
+      this.config.onLoginError?.('Campos obrigatórios não preenchidos');
+    }
+  }
+
+  // Manipula o login com Google
+  private handleGoogleLogin(): void {
+    showToast('Redirecionando para login com Google...', 'info');
+    // Implementar integração com Google Sign-in aqui
+  }
+}
+
+// Função utilitária para facilitar o uso do componente
+export function renderLoginForm(parentElement: HTMLElement, config?: FormLoginConfig): FormLogin {
+  const formLogin = new FormLogin(config);
+  parentElement.appendChild(formLogin.render());
+  return formLogin;
 }
