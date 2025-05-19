@@ -368,17 +368,9 @@ export class FormLogin {
 
     const line1 = document.createElement('div');
     line1.className = 'h-px bg-gray-600 flex-grow';
-
-    const text = document.createElement('div');
-    text.className = 'px-4 text-sm text-gray-400';
-    text.textContent = 'ou continue com';
-
-    const line2 = document.createElement('div');
-    line2.className = 'h-px bg-gray-600 flex-grow';
-
+    
     container.appendChild(line1);
-    container.appendChild(text);
-    container.appendChild(line2);
+
 
     return container;
   }
@@ -471,32 +463,22 @@ export class FormLogin {
       this.handleLogin();
     });
 
-    // Google login button
-    const googleButton = this.formElement.querySelector('#login-google');
-    googleButton?.addEventListener('click', () => {
-      this.handleGoogleLogin();
-    });
   }
 
-  // Manipula o login normal
-  private handleLogin(): void {
-    const email = this.emailInput.value;
-    const password = this.passwordInput.value;
+  // // Manipula o login normal
+  // private handleLogin(): void {
+  //   const email = this.emailInput.value;
+  //   const password = this.passwordInput.value;
     
-    if (email && password) {
-      showToast('Login bem-sucedido!', 'success');
-      this.config.onLoginSuccess?.();
-    } else {
-      showToast('Por favor, preencha todos os campos!', 'error');
-      this.config.onLoginError?.('Campos obrigatórios não preenchidos');
-    }
-  }
+  //   if (email && password) {
+  //     showToast('Login bem-sucedido!', 'success');
+  //     this.config.onLoginSuccess?.();
+  //   } else {
+  //     showToast('Por favor, preencha todos os campos!', 'error');
+  //     this.config.onLoginError?.('Campos obrigatórios não preenchidos');
+  //   }
+  // }
 
-  // Manipula o login com Google
-  private handleGoogleLogin(): void {
-    showToast('Redirecionando para login com Google...', 'info');
-    // Implementar integração com Google Sign-in aqui
-  }
 }
 
 // Função utilitária para facilitar o uso do componente
