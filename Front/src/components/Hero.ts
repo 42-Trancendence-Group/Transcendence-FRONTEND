@@ -4,15 +4,10 @@ export function createHero(): HTMLElement {
   const heroSection = document.createElement('div');
   heroSection.className = 'relative py-12 md:py-24 overflow-hidden';
   
-  // Gradient overlay
-  const gradientOverlay = document.createElement('div');
-  gradientOverlay.className = 'absolute inset-0 bg-arcade-darker opacity-80 z-0';
-  
   // Grid overlay
   const gridOverlay = document.createElement('div');
   gridOverlay.className = 'absolute inset-0 z-0';
   gridOverlay.style.backgroundSize = '50px 50px';
-  gridOverlay.style.backgroundImage = 'linear-gradient(rgba(65, 0, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(65, 0, 255, 0.1) 1px)';
   gridOverlay.style.backgroundPosition = 'center center';
   
   // Content
@@ -74,7 +69,7 @@ export function createHero(): HTMLElement {
   const tableNet = document.createElement('div');
   tableNet.className = 'absolute inset-0 flex items-center justify-center';
   const net = document.createElement('div');
-  net.className = 'h-full w-1 bg-neon-green opacity-80';
+  net.className = 'h-full w-1 bg-neon-blue opacity-80';
   tableNet.appendChild(net);
   
   const ball = document.createElement('div');
@@ -83,7 +78,7 @@ export function createHero(): HTMLElement {
   ball.style.top = '40%';
   
   const leftPaddle = document.createElement('div');
-  leftPaddle.className = 'absolute h-16 w-2 bg-neon-blue left-4 top-1/2 -translate-y-1/2';
+  leftPaddle.className = 'absolute h-16 w-2 bg-neon-green left-4 top-1/2 -translate-y-1/2';
   
   const rightPaddle = document.createElement('div');
   rightPaddle.className = 'absolute h-16 w-2 bg-neon-pink right-4 top-1/2 -translate-y-1/2';
@@ -160,7 +155,6 @@ export function createHero(): HTMLElement {
   content.appendChild(flexContainer);
   content.appendChild(featuresGrid);
   
-  heroSection.appendChild(gradientOverlay);
   heroSection.appendChild(gridOverlay);
   heroSection.appendChild(content);
   

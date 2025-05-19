@@ -117,7 +117,7 @@ function createCreatorCard(creator: Creator): HTMLElement {
 
 export function createCreatorsSection(): HTMLElement {
   const section = document.createElement('section');
-  section.className = 'py-12 bg-arcade-darker'; // Pode reduzir o py-16 para py-12 também
+  section.className = 'py-12 bg-arcade-darker-creator'; // Pode reduzir o py-16 para py-12 também
 
   const container = document.createElement('div');
   container.className = 'container mx-auto px-4 md:px-6'; // Pode reduzir o px-6 para px-4
@@ -143,7 +143,7 @@ export function createCreatorsSection(): HTMLElement {
   // Mantido sm:grid-cols-2 lg:grid-cols-3. Se com 5 cards ainda for muito,
   // e você quiser todos numa linha em telas grandes, pode usar lg:grid-cols-5 ou xl:grid-cols-5.
   // Ou, para telas médias, md:grid-cols-3.
-  grid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-6';
+  grid.className = ' grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-6';
   // Adicionei xl:grid-cols-5 para que em telas bem largas, os 5 caibam em uma linha.
   // Adicionei md:grid-cols-3 para um passo intermediário.
 
