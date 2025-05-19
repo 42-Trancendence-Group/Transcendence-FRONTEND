@@ -1,20 +1,27 @@
 // /frontend/src/pages/GamePage.ts
 import { createNavbar } from '../components/Navbar';
 import { createFooter } from '../components/Footer';
-import { createGameUI, drawGame, GameState, GameElements } from '../components/GameUI';
-import { GameService } from '../services/GameService';
+import { 
+    createFullGameUI, 
+    drawGame, 
+    GameState, 
+    UIElements
+} from '../components/GameUI';
+import { GameService, GameServiceCallbacks } from '../services/GameService';
 
-// Store active elements and service for cleanup
 let gameServiceInstance: GameService | null = null;
 let keydownListener: ((event: KeyboardEvent) => void) | null = null;
-let keyupListener: ((event: KeyboardEvent) => void) | null = null; // If needed
-let resizeListener: (() => void) | null = null;
+let keyupListener: ((event: KeyboardEvent) => void) | null = null;
+let windowResizeListener: (() => void) | null = null; 
 let animationFrameId: number | null = null;
-let uiElements: GameElements | null = null;
 let controlledPlayer: "player1" | "player2" | null = null;
+let currentGameState: GameState | null = null;
+let ui: UIElements | null = null; 
+let gameStatusTimeoutId: number | null = null; 
 
+type UIPageState = "IDLE" | "SEARCHING" | "MATCH_FOUND" | "WAITING_FOR_OPPONENT" | "GAME_STARTING" | "IN_GAME" | "GAME_OVER";
+let currentUIPageState: UIPageState = "IDLE";
 
-// Ensure root is cleared (you might have this in your router or a utility)
 function clearRoot(rootElement: HTMLElement): void {
   while (rootElement.firstChild) {
     rootElement.removeChild(rootElement.firstChild);
@@ -23,217 +30,250 @@ function clearRoot(rootElement: HTMLElement): void {
 
 function cleanupGamePage(): void {
   console.log("Cleaning up GamePage resources...");
-  if (gameServiceInstance) {
-    gameServiceInstance.disconnect();
-    gameServiceInstance = null;
-  }
-  if (keydownListener) {
-    document.removeEventListener('keydown', keydownListener);
-    keydownListener = null;
-  }
-  if (keyupListener) {
-    document.removeEventListener('keyup', keyupListener);
-    keyupListener = null;
-  }
-  if (resizeListener) {
-    window.removeEventListener('resize', resizeListener);
-    resizeListener = null;
-  }
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId);
-    animationFrameId = null;
-  }
-  uiElements = null;
-  controlledPlayer = null;
+  if (gameServiceInstance) gameServiceInstance.disconnect();
+  if (keydownListener) document.removeEventListener('keydown', keydownListener);
+  if (keyupListener) document.removeEventListener('keyup', keyupListener);
+  if (windowResizeListener) window.removeEventListener('resize', windowResizeListener);
+  if (animationFrameId) cancelAnimationFrame(animationFrameId);
+  if (gameStatusTimeoutId) clearTimeout(gameStatusTimeoutId);
+  
+  gameServiceInstance = null; keydownListener = null; keyupListener = null; windowResizeListener = null;
+  animationFrameId = null; controlledPlayer = null; currentGameState = null; ui = null;
+  gameStatusTimeoutId = null;
 }
 
-// A simple local state for rendering, updated by GameService
-let currentGameState: GameState | null = null;
-
 function gameLoop() {
-  if (uiElements && uiElements.context && currentGameState) {
-    drawGame(uiElements.context, uiElements.canvas, currentGameState);
+  if (currentUIPageState === "IN_GAME" && ui && ui.context && currentGameState) {
+    drawGame(ui.context, ui.canvas, currentGameState);
   }
   animationFrameId = requestAnimationFrame(gameLoop);
 }
 
+function positionGameCanvas() {
+    if (!ui || !ui.pingPongTableElement || !ui.canvas || !ui.pageContainer) return; // Adicionado ui.pageContainer check
+
+    const tableRect = ui.pingPongTableElement.getBoundingClientRect();
+    const pageContainerRect = ui.pageContainer.getBoundingClientRect(); 
+
+    ui.canvas.style.width = `${tableRect.width}px`;
+    ui.canvas.style.height = `${tableRect.height}px`;
+    ui.canvas.style.position = 'absolute'; 
+    ui.canvas.style.left = `${tableRect.left - pageContainerRect.left}px`;
+    ui.canvas.style.top = `${tableRect.top - pageContainerRect.top}px`;
+    ui.canvas.style.zIndex = '5'; 
+}
+
+function updateUIForState(newState: UIPageState): void {
+    if (!ui) return;
+    currentUIPageState = newState;
+    console.log("UI State changed to:", newState);
+
+    if (gameStatusTimeoutId) {
+        clearTimeout(gameStatusTimeoutId);
+        gameStatusTimeoutId = null;
+    }
+
+    ui.matchmakingContainer.style.display = 'none';
+    ui.scoreDisplay.style.display = 'none';
+    ui.gameStatusDisplay.style.display = 'none';
+    ui.canvas.style.display = 'none';
+    if (ui.findMatchButton) ui.findMatchButton.style.display = 'none';
+    ui.backgroundTableContainer.classList.add('opacity-30', 'blur-sm');
+    ui.backgroundTableContainer.classList.remove('opacity-100', 'blur-none');
+
+    const existingAcceptButton = document.getElementById('accept-match-button');
+    if (existingAcceptButton) existingAcceptButton.remove();
+    const existingPlayAgainButton = document.getElementById('play-again-button');
+    if (existingPlayAgainButton) existingPlayAgainButton.remove();
+
+    switch (newState) {
+        case "IDLE":
+            ui.matchmakingContainer.style.display = 'flex';
+            if (ui.findMatchButton) ui.findMatchButton.style.display = 'block';
+            ui.matchStatusDisplay.textContent = 'Pronto para jogar?';
+            break;
+        case "SEARCHING":
+            ui.matchmakingContainer.style.display = 'flex';
+            ui.matchStatusDisplay.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-neon-green mx-auto mb-2"></div>Buscando partida...';
+            break;
+        case "MATCH_FOUND":
+            ui.matchmakingContainer.style.display = 'flex';
+            ui.matchStatusDisplay.textContent = 'Partida encontrada!';
+            const acceptButton = document.createElement('button');
+            acceptButton.id = 'accept-match-button'; 
+            acceptButton.textContent = 'Aceitar';
+            acceptButton.className = 'mt-4 px-6 py-2 bg-neon-green text-arcade-darker font-bold rounded hover:bg-opacity-80';
+            acceptButton.onclick = () => gameServiceInstance?.acceptMatch();
+            ui.matchmakingContainer.appendChild(acceptButton);
+            break;
+        case "WAITING_FOR_OPPONENT":
+            ui.matchmakingContainer.style.display = 'flex';
+            ui.matchStatusDisplay.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-neon-blue mx-auto mb-2"></div>Aguardando oponente...';
+            break;
+        case "GAME_STARTING":
+            ui.matchmakingContainer.style.display = 'flex'; 
+            ui.backgroundTableContainer.classList.remove('opacity-30', 'blur-sm');
+            ui.backgroundTableContainer.classList.add('opacity-100', 'blur-none');
+            positionGameCanvas(); 
+            break;
+        case "IN_GAME":
+            ui.scoreDisplay.style.display = 'block'; 
+            ui.gameStatusDisplay.style.display = 'block'; 
+            ui.gameStatusDisplay.textContent = "GO!";
+            ui.canvas.style.display = 'block';
+            ui.backgroundTableContainer.classList.remove('opacity-30', 'blur-sm');
+            ui.backgroundTableContainer.classList.add('opacity-100', 'blur-none');
+            positionGameCanvas(); 
+
+            gameStatusTimeoutId = window.setTimeout(() => {
+                if (ui && ui.gameStatusDisplay && currentUIPageState === "IN_GAME") { 
+                    ui.gameStatusDisplay.textContent = ''; 
+                }
+            }, 1500); 
+            break;
+        case "GAME_OVER":
+            ui.scoreDisplay.style.display = 'block';
+            ui.gameStatusDisplay.style.display = 'block'; 
+            ui.canvas.style.display = 'block'; 
+            ui.backgroundTableContainer.classList.remove('opacity-30', 'blur-sm');
+            ui.backgroundTableContainer.classList.add('opacity-100', 'blur-none');
+            
+            const playAgainButton = document.createElement('button');
+            playAgainButton.id = 'play-again-button'; 
+            playAgainButton.textContent = 'Jogar Novamente';
+            playAgainButton.className = 'mt-4 px-6 py-2 bg-neon-pink text-white font-bold rounded hover:bg-opacity-80';
+            playAgainButton.onclick = () => {
+                currentGameState = null; 
+                if(ui?.scoreDisplay) ui.scoreDisplay.textContent = "P1: 0 - P2: 0";
+                updateUIForState("IDLE");
+            };
+            ui.gameStatusDisplay.insertAdjacentElement('afterend', playAgainButton);
+            break;
+    }
+}
 
 export function renderGamePage(): void {
   const root = document.getElementById('root');
-  if (!root) {
-    console.error('Root element not found!');
-    return;
-  }
+  if (!root) { console.error('Root element not found!'); return; }
   
-  cleanupGamePage(); // Clean up any previous instance of the game page
-  clearRoot(root); // Clear the root for the new page
+  cleanupGamePage();
+  clearRoot(root);
 
-  const pageContainer = document.createElement('div');
-  pageContainer.className = 'min-h-screen flex flex-col bg-arcade-dark text-arcade-light';
+  ui = createFullGameUI();
 
-  pageContainer.appendChild(createNavbar());
+  ui.pageContainer.appendChild(createNavbar());
 
-  const main = document.createElement('main');
-  main.className = 'flex-grow flex flex-col items-center justify-center container mx-auto px-2 py-4 sm:px-4 sm:py-8';
+  const scoreContainer = document.createElement('div');
+  scoreContainer.className = 'w-full flex justify-center py-4 z-20 relative'; 
+  scoreContainer.appendChild(ui.scoreDisplay); 
+  ui.pageContainer.appendChild(scoreContainer);
+
+  ui.pageContainer.appendChild(ui.backgroundTableContainer); 
+  ui.pageContainer.appendChild(ui.mainContent); 
+  ui.pageContainer.appendChild(ui.canvas); 
+  ui.pageContainer.appendChild(createFooter());
+  root.appendChild(ui.pageContainer);
   
-  uiElements = createGameUI();
-  main.appendChild(uiElements.gameContainer);
+  windowResizeListener = positionGameCanvas;
+  window.addEventListener('resize', windowResizeListener);
 
-  // Initial canvas sizing based on its container
-  const setCanvasSize = () => {
-    if (uiElements && uiElements.canvas && uiElements.canvas.parentElement) { // Added uiElements.canvas check
-        // Respect aspect ratio 4:3
-        const parentWidth = uiElements.canvas.parentElement.clientWidth;
-        uiElements.canvas.style.width = `${parentWidth}px`;
-        uiElements.canvas.style.height = `${parentWidth * (3/4)}px`;
-        // The internal resolution can be different, often set by server or fixed
-        // For now, let's match CSS size, but `drawGame` will respect GameState.canvasDimensions
-        // uiElements.canvas.width = parentWidth;
-        // uiElements.canvas.height = parentWidth * (3/4);
-    }
-  };
-
-  setCanvasSize(); // Initial size
-  resizeListener = setCanvasSize; // Resize on window change
-  window.addEventListener('resize', resizeListener);
-
-
-  pageContainer.appendChild(main);
-  pageContainer.appendChild(createFooter());
-  root.appendChild(pageContainer);
-
-  if (!uiElements.context) return; // Early exit if canvas context failed
-
-  // Initialize Game Service
-  gameServiceInstance = new GameService('ws://localhost:8080/ws/pong/', { // ADJUST URL
+  const serviceCallbacks: GameServiceCallbacks = {
     onOpen: () => {
-      if (uiElements && uiElements.statusDisplay) {
-        uiElements.statusDisplay.textContent = 'Connected! Waiting for game...';
-      }
+        if(ui?.matchStatusDisplay) ui.matchStatusDisplay.textContent = 'Conectado ao servidor.';
+        updateUIForState("IDLE");
     },
-    onClose: (event) => {
-       if (uiElements && uiElements.statusDisplay) {
-           uiElements.statusDisplay.textContent = `Disconnected: ${event.reason || 'Connection lost'}`;
-           uiElements.statusDisplay.classList.remove('text-neon-green');
-           uiElements.statusDisplay.classList.add('text-neon-red'); // Or some warning color
-       } else {
-           console.warn("onClose: uiElements or statusDisplay is not available for update.");
-       }
+    onClose: (event) => { 
+        if(ui?.matchStatusDisplay) {
+            ui.matchStatusDisplay.textContent = `Desconectado: ${event.reason || 'Conexão perdida'}`;
+        }
+        updateUIForState("IDLE");
     },
     onGameStateUpdate: (gameState) => {
-      currentGameState = gameState; // Update local state for gameLoop
-      if (uiElements && uiElements.scoreDisplay && uiElements.canvas) { // Added uiElements.canvas check
-         uiElements.scoreDisplay.textContent = `P1: ${gameState.score1} - P2: ${gameState.score2}`;
-         // The gameLoop handles drawing.
-         // If server dictates canvas dimensions and they differ, resize canvas:
-         if (gameState.canvasDimensions) {
-            if (uiElements.canvas.width !== gameState.canvasDimensions.width ||
-                uiElements.canvas.height !== gameState.canvasDimensions.height) {
-                uiElements.canvas.width = gameState.canvasDimensions.width;
-                uiElements.canvas.height = gameState.canvasDimensions.height;
-                console.log(`Canvas resized by server to: ${uiElements.canvas.width}x${uiElements.canvas.height}`);
+      currentGameState = gameState;
+      if (ui && ui.scoreDisplay && ui.canvas) {
+         ui.scoreDisplay.textContent = `P1: ${gameState.score1} - P2: ${gameState.score2}`;
+         if (gameState.canvasDimensions) { 
+            if (ui.canvas.width !== gameState.canvasDimensions.width ||
+                ui.canvas.height !== gameState.canvasDimensions.height) {
+                ui.canvas.width = gameState.canvasDimensions.width;
+                ui.canvas.height = gameState.canvasDimensions.height;
+                console.log(`Canvas logical resolution set to: ${ui.canvas.width}x${ui.canvas.height}`);
+                positionGameCanvas(); 
             }
          }
       }
     },
     onGameEvent: (eventData) => {
-      if (uiElements && uiElements.statusDisplay) {
-        uiElements.statusDisplay.textContent = eventData.message || eventData.event;
-        if (eventData.event === "GAME_OVER") {
-            uiElements.statusDisplay.textContent = `GAME OVER! ${eventData.winner === 'draw' ? 'It\'s a draw!' : (eventData.winner?.toUpperCase() + ' WINS!')} ${eventData.message || ''}`;
-            // Consider adding a "Play Again" button or similar UX here
-        } else if (eventData.event === "WAITING_FOR_OPPONENT" || eventData.event === "MATCH_FOUND") {
-            // Potentially more specific UI updates
+        if (!ui) return;
+        if (eventData.event === "COUNTDOWN" && ui.matchStatusDisplay) {
+            updateUIForState("GAME_STARTING");
+            ui.matchStatusDisplay.textContent = eventData.message || `Iniciando em ${eventData.countdownValue}...`;
+        } else if (eventData.event === "GAME_START") {
+            updateUIForState("IN_GAME");
+        } else if (eventData.event === "GAME_OVER" && ui.gameStatusDisplay) {
+            ui.gameStatusDisplay.textContent = `FIM DE JOGO! ${eventData.winner === 'draw' ? 'Empate!' : (eventData.winner?.toUpperCase() + ' VENCEU!')} ${eventData.message || ''}`;
+            updateUIForState("GAME_OVER");
         }
-      } else {
-        console.warn("onGameEvent: uiElements or statusDisplay is not available for update.");
-      }
     },
-    onAssignPlayer: (playerData) => {
+    onMatchmakingEvent: (eventData) => { 
+        if (!ui || !ui.matchStatusDisplay) return;
+        ui.matchStatusDisplay.textContent = eventData.message;
+        if (eventData.event === "SEARCHING") {
+            updateUIForState("SEARCHING");
+        } else if (eventData.event === "MATCH_FOUND") {
+            updateUIForState("MATCH_FOUND");
+        } else if (eventData.event === "WAITING_FOR_OPPONENT_ACCEPT") {
+            updateUIForState("WAITING_FOR_OPPONENT");
+        }
+    },
+    onAssignPlayer: (playerData) => { 
         controlledPlayer = playerData.player;
-        if (uiElements && uiElements.statusDisplay) {
-            const currentStatus = uiElements.statusDisplay.textContent || "";
-            uiElements.statusDisplay.textContent = `You are ${playerData.player.toUpperCase()}. ${currentStatus}`;
-        } else {
-            console.warn("onAssignPlayer: uiElements or statusDisplay is not available for update.");
-        }
     },
-    onError: (errorMessage) => {
-      if (uiElements && uiElements.statusDisplay) {
-        uiElements.statusDisplay.textContent = `Error: ${errorMessage}`;
-        uiElements.statusDisplay.classList.remove('text-neon-green');
-        uiElements.statusDisplay.classList.add('text-neon-red');
-      } else {
-        console.warn("onError: uiElements or statusDisplay is not available for update.");
-      }
+    onError: (errorMessage) => { 
+        if(ui?.matchStatusDisplay) ui.matchStatusDisplay.textContent = `Erro: ${errorMessage}`;
     },
-    onStatusUpdate: (status) => {
-        if (uiElements && uiElements.statusDisplay) {
-            uiElements.statusDisplay.textContent = status;
-            // Reset color to green for positive/neutral status
-            uiElements.statusDisplay.classList.remove('text-neon-red');
-            uiElements.statusDisplay.classList.add('text-neon-green');
-        } else {
-            console.warn("onStatusUpdate: uiElements or statusDisplay is not available for update.");
-        }
-    }
-  });
+    onStatusUpdate: (status) => { /* console.log("WebSocket Status:", status); */ }
+  };
 
+  gameServiceInstance = new GameService('ws://localhost:8080/ws/pong/game/', serviceCallbacks); // Use a URL correta do seu backend
   gameServiceInstance.connect();
 
-  // Keyboard listeners
-  // Store pressed keys to prevent spamming server if backend doesn't handle rapid fire well
+  if (ui?.findMatchButton) {
+    ui.findMatchButton.onclick = () => gameServiceInstance?.findMatch();
+  }
+
   const pressedKeys = new Set<string>();
-
-  keydownListener = (event: KeyboardEvent) => {
-    if (!gameServiceInstance || !controlledPlayer) return;
-
+  keydownListener = (event: KeyboardEvent) => { 
+    if (currentUIPageState !== "IN_GAME" || !gameServiceInstance || !controlledPlayer) return;
     let action: string | null = null;
-    
     switch (event.key.toLowerCase()) {
-      case 'w':
-      case 'arrowup': 
-        action = 'MOVE_UP';
-        break;
-      case 's':
-      case 'arrowdown':
-        action = 'MOVE_DOWN';
-        break;
+      case 'w': case 'arrowup': action = 'MOVE_UP'; break;
+      case 's': case 'arrowdown': action = 'MOVE_DOWN'; break;
     }
-
     if (action && !pressedKeys.has(event.key.toLowerCase())) {
-      gameServiceInstance.sendInput(action as "MOVE_UP" | "MOVE_DOWN");
+      gameServiceInstance.sendInput(action as any);
       pressedKeys.add(event.key.toLowerCase());
       event.preventDefault(); 
     }
   };
-  document.addEventListener('keydown', keydownListener);
-  
-  keyupListener = (event: KeyboardEvent) => { // If you need to send STOP events
-  if (!gameServiceInstance || !controlledPlayer) return;
-  let action: string | null = null;
-  // Ensure pressedKeys is checked and key is removed
-  const lowerKey = event.key.toLowerCase();
-  if (!pressedKeys.has(lowerKey)) return; // Only process keyup for keys that were pressed by us
-
-  switch (lowerKey) {
-    case 'w':
-    case 'arrowup':
-      action = 'STOP_UP'; // Or just 'STOP_MOVING'
-      break;
-    case 's':
-    case 'arrowdown':
-      action = 'STOP_DOWN'; // Or just 'STOP_MOVING'
-      break;
-  }
-  if (action) {
-    gameServiceInstance.sendInput(action as "STOP_UP" | "STOP_DOWN"); 
-    pressedKeys.delete(lowerKey);
-    event.preventDefault();
-  }
+  keyupListener = (event: KeyboardEvent) => { 
+    if (currentUIPageState !== "IN_GAME" ||!gameServiceInstance || !controlledPlayer) return;
+    let action: string | null = null;
+    const lowerKey = event.key.toLowerCase();
+    if (!pressedKeys.has(lowerKey)) return;
+    switch (lowerKey) {
+      case 'w': case 'arrowup': action = 'STOP_UP'; break;
+      case 's': case 'arrowdown': action = 'STOP_DOWN'; break;
+    }
+    if (action) {
+      gameServiceInstance.sendInput(action as any); 
+      pressedKeys.delete(lowerKey);
+      event.preventDefault();
+    }
   };
+  document.addEventListener('keydown', keydownListener);
   document.addEventListener('keyup', keyupListener);
 
-  // Start the rendering loop
+  updateUIForState("IDLE");
   gameLoop();
 }
