@@ -95,7 +95,7 @@ export function createFullGameUI(): UIElements {
 
   const gameStatusDisplay = document.createElement('div');
   gameStatusDisplay.id = 'game-overall-status';
-  gameStatusDisplay.className = 'text-2xl text-neon-green mt-4 mb-6 h-10 text-center font-bold'; 
+  gameStatusDisplay.className = 'font-bold text-xl md:text-2xl text-green neon-text'; 
   gameStatusDisplay.style.display = 'none';
 
   // Adicionar elementos de matchmaking e status do jogo ao mainContent

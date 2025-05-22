@@ -129,7 +129,7 @@ function updateUIForState(newState: UIPageState): void {
                 if (ui && ui.gameStatusDisplay && currentUIPageState === "IN_GAME") { 
                     ui.gameStatusDisplay.textContent = ''; 
                 }
-            }, 1500); 
+            }, 500); 
             break;
         case "GAME_OVER":
             ui.scoreDisplay.style.display = 'block';

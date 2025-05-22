@@ -1,13 +1,16 @@
 /**
  * Creates the How To Play content section
  */
+
+import { navigateTo } from '../router/index';
+
 export function createHowToPlaySection(): HTMLElement {
   const container = document.createElement('div');
   container.className = 'container mx-auto px-4 py-12';
   
   // Title
   const title = document.createElement('h1');
-  title.className = 'text-4xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-400';
+  title.className = 'text-4xl md:text-5xl lg:text-4xl font-bold mb-4 text-center text-white';
   title.textContent = 'Como Jogar';
   container.appendChild(title);
   
@@ -18,7 +21,7 @@ export function createHowToPlaySection(): HTMLElement {
   // Objective Section
   const objectiveSection = createContentSection('Objetivo do jogo', [
     'O objetivo do Ping Pong é simples: marcar mais pontos que seu oponente. Um ponto é marcado quando a bola passa pelo adversário e atinge a parede atrás dele.',
-    'O primeiro jogador a alcançar 11 pontos vence a partida.'
+    'O primeiro jogador a alcançar 5 pontos vence a partida.'
   ]);
   contentWrapper.appendChild(objectiveSection);
   
@@ -30,7 +33,7 @@ export function createHowToPlaySection(): HTMLElement {
   controlsContent.className = 'p-6';
   
   const controlsTitle = document.createElement('h2');
-  controlsTitle.className = 'text-2xl font-bold mb-4 text-purple-400';
+  controlsTitle.className = 'text-2xl font-bold mb-4 text-purple-400 text-center';
   controlsTitle.textContent = 'Controles';
   controlsContent.appendChild(controlsTitle);
   
@@ -68,30 +71,30 @@ export function createHowToPlaySection(): HTMLElement {
   arrowControl.appendChild(arrowKeys);
   arrowControl.appendChild(arrowText);
   
-  // Pause key control
-  const pauseControl = document.createElement('div');
-  pauseControl.className = 'flex items-center';
+  // // Pause key control
+  // const pauseControl = document.createElement('div');
+  // pauseControl.className = 'flex items-center';
   
-  const pauseKey = document.createElement('div');
-  pauseKey.className = 'mr-4';
+  // const pauseKey = document.createElement('div');
+  // pauseKey.className = 'mr-4';
   
-  const pKey = document.createElement('div');
-  pKey.className = 'h-10 w-10 rounded border border-white flex items-center justify-center text-white font-bold';
-  pKey.textContent = 'P';
+  // const pKey = document.createElement('div');
+  // pKey.className = 'h-10 w-10 rounded border border-white flex items-center justify-center text-white font-bold';
+  // pKey.textContent = 'P';
   
-  pauseKey.appendChild(pKey);
+  // pauseKey.appendChild(pKey);
   
-  const pauseText = document.createElement('div');
-  const pauseDesc = document.createElement('p');
-  pauseDesc.className = 'text-gray-300';
-  pauseDesc.innerHTML = 'Pressione a tecla <span class="text-white font-bold">P</span> para pausar ou retomar o jogo.';
+  // const pauseText = document.createElement('div');
+  // const pauseDesc = document.createElement('p');
+  // pauseDesc.className = 'text-gray-300';
+  // pauseDesc.innerHTML = 'Pressione a tecla <span class="text-white font-bold">P</span> para pausar ou retomar o jogo.';
   
-  pauseText.appendChild(pauseDesc);
-  pauseControl.appendChild(pauseKey);
-  pauseControl.appendChild(pauseText);
+  // pauseText.appendChild(pauseDesc);
+  // pauseControl.appendChild(pauseKey);
+  // pauseControl.appendChild(pauseText);
   
   controlsGrid.appendChild(arrowControl);
-  controlsGrid.appendChild(pauseControl);
+  // controlsGrid.appendChild(pauseControl);
   controlsContent.appendChild(controlsGrid);
   controlsSection.appendChild(controlsContent);
   
@@ -155,19 +158,29 @@ export function createHowToPlaySection(): HTMLElement {
   backButton.appendChild(backChevron);
   backButton.appendChild(document.createTextNode('Voltar'));
   
-  const playButton = document.createElement('a');
-  playButton.href = '/Game';
-  playButton.className = 'px-4 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 rounded text-white hover:opacity-90 transition flex items-center';
+  // const playButton = document.createElement('a');
+  // playButton.href = '/Game';
+  // playButton.className = 'px-4 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 rounded text-white hover:opacity-90 transition flex items-center';
   
-  const playIcon = document.createElement('span');
-  playIcon.className = 'mr-2';
-  playIcon.textContent = '▶';
+  // const playIcon = document.createElement('span');
+  // playIcon.className = 'mr-2';
+  // playIcon.textContent = '▶';
   
-  playButton.appendChild(playIcon);
-  playButton.appendChild(document.createTextNode('Jogar Agora'));
+  // playButton.appendChild(playIcon);
+  // playButton.appendChild(document.createTextNode('Jogar Agora'));
+
+   const primaryButton = document.createElement('button');
+    primaryButton.className = 'px-4 py-2 bg-neon-pink text-arcade-darker hover:bg-neon-purple hover:text-white text-lg flex items-center gap-2 animate-pulse-neon rounded';
+    primaryButton.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+      </svg>
+      Jogar Agora
+    `;
+    primaryButton.addEventListener('click', () => navigateTo('/Login'));
   
   navButtons.appendChild(backButton);
-  navButtons.appendChild(playButton);
+  navButtons.appendChild(primaryButton);
   
   contentWrapper.appendChild(navButtons);
   container.appendChild(contentWrapper);
