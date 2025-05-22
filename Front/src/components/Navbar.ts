@@ -30,20 +30,20 @@ export function createNavbar(): HTMLElement {
   const desktopNav = document.createElement('div');
   desktopNav.className = 'hidden md:flex items-center gap-6';
   
-  const navItems = [
-    { }
-  ];
+  // const navItems = [
+  //   { }
+  // ];
   
-  navItems.forEach(item => {
-    const navLink = document.createElement('a');
-    navLink.className = 'text-white hover:text-neon-green transition-colors cursor-pointer';
-    navLink.textContent = item.text;
-    navLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      navigateTo(item.path);
-    });
-    desktopNav.appendChild(navLink);
-  });
+  // navItems.forEach(item => {
+  //   const navLink = document.createElement('a');
+  //   navLink.className = 'text-white hover:text-neon-green transition-colors cursor-pointer';
+  //   navLink.textContent = item.text;
+  //   navLink.addEventListener('click', (e) => {
+  //     e.preventDefault();
+  //     navigateTo(item.path);
+  //   });
+  //   desktopNav.appendChild(navLink);
+  // });
   
   // Auth buttons
   const authButtons = document.createElement('div');
@@ -57,7 +57,7 @@ export function createNavbar(): HTMLElement {
   const registerBtn = document.createElement('button');
   registerBtn.className = 'bg-neon-pink text-arcade-darker hover:bg-neon-purple hover:text-white px-4 py-2 rounded';
   registerBtn.textContent = 'Registrar';
-  registerBtn.addEventListener('click', ()=> navigateTo('/Registrar'))
+  registerBtn.addEventListener('click', ()=> navigateTo('/Register'))
   
   authButtons.appendChild(loginBtn);
   authButtons.appendChild(registerBtn);
@@ -76,17 +76,17 @@ export function createNavbar(): HTMLElement {
   const mobileNavContent = document.createElement('div');
   mobileNavContent.className = 'flex flex-col p-4 space-y-3';
   
-  navItems.forEach(item => {
-    const mobileLink = document.createElement('a');
-    mobileLink.className = 'text-white hover:text-neon-green p-2 transition-colors cursor-pointer';
-    mobileLink.textContent = item.text;
-    mobileLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      navigateTo(item.path);
-      mobileMenu.classList.add('hidden');
-    });
-    mobileNavContent.appendChild(mobileLink);
-  });
+  // navItems.forEach(item => {
+  //   const mobileLink = document.createElement('a');
+  //   mobileLink.className = 'text-white hover:text-neon-green p-2 transition-colors cursor-pointer';
+  //   mobileLink.textContent = item.text;
+  //   mobileLink.addEventListener('click', (e) => {
+  //     e.preventDefault();
+  //     navigateTo(item.path);
+  //     mobileMenu.classList.add('hidden');
+  //   });
+  //   mobileNavContent.appendChild(mobileLink);
+  // });
   
   const mobileBtns = document.createElement('div');
   mobileBtns.className = 'pt-3 flex gap-2';
@@ -94,10 +94,12 @@ export function createNavbar(): HTMLElement {
   const mobileLoginBtn = document.createElement('button');
   mobileLoginBtn.className = 'border-neon-blue text-neon-blue hover:bg-neon-blue hover:text-arcade-darker w-1/2 px-3 py-1 rounded border text-sm';
   mobileLoginBtn.textContent = 'Login';
+  mobileLoginBtn.addEventListener('click', ()=> navigateTo('/Login'))
   
   const mobileRegisterBtn = document.createElement('button');
   mobileRegisterBtn.className = 'bg-neon-pink text-arcade-darker hover:bg-neon-purple hover:text-white w-1/2 px-3 py-1 rounded text-sm';
   mobileRegisterBtn.textContent = 'Registrar';
+  mobileRegisterBtn.addEventListener('click', ()=> navigateTo('/Register'))
   
   mobileBtns.appendChild(mobileLoginBtn);
   mobileBtns.appendChild(mobileRegisterBtn);

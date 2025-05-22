@@ -2,21 +2,22 @@
 import { showToast } from '../utils/toast';
 
 // Interface para tipagem do componente
-interface FormLoginConfig {
+interface FormRegisterConfig {
   parentElement?: HTMLElement;
   onLoginSuccess?: () => void;
   onLoginError?: (error: string) => void;
 }
 
 // Classe principal do componente
-export class FormLogin {
+export class FormRegister {
   private formElement: HTMLDivElement;
+  private nicknameInput: HTMLInputElement;
   private emailInput: HTMLInputElement;
   private passwordInput: HTMLInputElement;
   private togglePasswordButton: HTMLDivElement;
-  private loginForm: HTMLFormElement;
+  private RegisterForm: HTMLFormElement;
 
-  constructor(private config: FormLoginConfig = {}) {
+  constructor(private config: FormRegisterConfig = {}) {
     this.formElement = this.createFormStructure();
     this.setupEventListeners();
   }
@@ -38,11 +39,8 @@ export class FormLogin {
     this.addFormHeader(formContainer);
 
     // Cria o formulário principal
-    this.loginForm = this.createLoginForm();
-    formContainer.appendChild(this.loginForm);
-
-    // Adiciona footer com link para registro
-    this.addFormFooter(formContainer);
+    this.RegisterForm = this.createRegisterForm();
+    formContainer.appendChild(this.RegisterForm);
 
     return formContainer;
   }
@@ -69,11 +67,11 @@ export class FormLogin {
 
     const title = document.createElement('h2');
     title.className = 'text-2xl font-bold text-center text-white neon-text';
-    title.textContent = 'Acessar sua Conta';
+    title.textContent = 'Novo Jogador';
 
     const subtitle = document.createElement('p');
     subtitle.className = 'text-center text-gray-300';
-    subtitle.textContent = 'Entre com seus dados para acessar a arena';
+    subtitle.textContent = 'Preencha os dados';
 
     headerContainer.appendChild(title);
     headerContainer.appendChild(subtitle);
@@ -81,10 +79,13 @@ export class FormLogin {
   }
 
   // Cria o formulário de login
-  private createLoginForm(): HTMLFormElement {
+  private createRegisterForm(): HTMLFormElement {
     const form = document.createElement('form');
     form.id = 'login-form';
     form.className = 'space-y-4';
+
+    // Adiciona campo de nickname
+    form.appendChild(this.createNicknameInput());
 
     // Adiciona campo de email
     form.appendChild(this.createEmailInput());
@@ -92,8 +93,6 @@ export class FormLogin {
     // Adiciona campo de senha
     form.appendChild(this.createPasswordInput());
 
-    // Adiciona lembrar senha e esqueci senha
-    form.appendChild(this.createRememberForgotSection());
 
     // Adiciona botão de submit
     form.appendChild(this.createSubmitButton());
@@ -103,6 +102,33 @@ export class FormLogin {
 
 
     return form;
+  }
+
+  private createNicknameInput(): HTMLElement {
+    const container = document.createElement('div');
+    container.className = 'space-y-1';
+
+    const label = document.createElement('label');
+    label.htmlFor = 'nickname';
+    label.className = 'text-sm text-gray-300';
+    label.textContent = 'Nickname';
+
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'relative';
+
+    // Input de email
+    this.nicknameInput = document.createElement('input');
+    this.nicknameInput.id = 'nickname';
+    this.nicknameInput.type = 'nickname';
+    this.nicknameInput.placeholder = 'igenial';
+    this.nicknameInput.className = 'flex h-10 w-full rounded-md border border-neon-blue bg-arcade-dark px-3 pl-9 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:outline-none focus:border-neon-green disabled:cursor-not-allowed disabled:opacity-50 md:text-sm text-white';
+    this.nicknameInput.required = true;
+
+    inputContainer.appendChild(this.nicknameInput);
+    container.appendChild(label);
+    container.appendChild(inputContainer);
+
+    return container;
   }
 
   // Cria campo de email
@@ -180,60 +206,27 @@ export class FormLogin {
     return container;
   }
 
-  // Cria seção "Lembrar de mim" e "Esqueceu a senha"
-  private createRememberForgotSection(): HTMLElement {
-    const container = document.createElement('div');
-    container.className = 'flex items-center justify-between';
-
-    // Checkbox "Lembrar de mim"
-    const rememberContainer = document.createElement('div');
-    rememberContainer.className = 'flex items-center space-x-2';
-
-    const checkbox = document.createElement('input');
-    checkbox.id = 'remember';
-    checkbox.type = 'checkbox';
-    checkbox.className = 'h-4 w-4 border border-neon-blue/50 bg-arcade-dark rounded';
-
-    const checkboxLabel = document.createElement('label');
-    checkboxLabel.htmlFor = 'remember';
-    checkboxLabel.className = 'text-sm text-gray-300 cursor-pointer';
-    checkboxLabel.textContent = 'Lembrar de mim';
-
-    rememberContainer.appendChild(checkbox);
-    rememberContainer.appendChild(checkboxLabel);
-
-    // Link "Esqueceu a senha"
-    const forgotLink = document.createElement('a');
-    forgotLink.href = '#forgot-password';
-    forgotLink.className = 'text-sm text-neon-blue hover:text-neon-green transition-colors';
-    forgotLink.textContent = 'Esqueceu a senha?';
-
-    container.appendChild(rememberContainer);
-    container.appendChild(forgotLink);
-
-    return container;
-  }
-
   private createSubmitButton(): HTMLButtonElement {
     const button = document.createElement('button');
     button.type = 'submit';
     button.className = 'w-full bg-neon-blue hover:bg-neon-green text-black font-bold transition-all duration-300 py-2 rounded-md h-10';
-    button.textContent = 'Entrar';
+    button.textContent = 'Registrar';
     
     // Adiciona evento de loading durante a requisição
     button.addEventListener('click', (e) => {
       e.preventDefault();
-      this.handleLogin(button);
+      this.handleRegister(button);
     });
     
     return button;
   }
 
-  private async handleLogin(button: HTMLButtonElement): Promise<void> {
+  private async handleRegister(button: HTMLButtonElement): Promise<void> {
     const email = this.emailInput.value;
     const password = this.passwordInput.value;
+    const nickname = this.nicknameInput.value;
 
-    if (!email || !password) {
+    if (!email || !password || !nickname) {
       showToast('Por favor, preencha todos os campos!', 'error');
       return;
     }
@@ -244,13 +237,14 @@ export class FormLogin {
 
     try {
       // 1. Fazer login inicial
-      const loginResponse = await this.sendLoginRequest(email, password);
+      const RegisterResponse = await this.sendRegisterRequest(nickname, email, password);
       
       // 2. Verificar se precisa de 2FA
-      if (loginResponse.requires2FA) {
-        this.show2FAPopup();
+      if (RegisterResponse) {
+        showToast('Login bem-sucedido!', 'success');
+        this.config.onLoginSuccess?.();
       } else {
-        this.config.onLoginSuccess?.(loginResponse.token);
+        showToast('Não foi possivel cadastrar', 'error');
       }
     } catch (error) {
       this.config.onLoginError?.(error instanceof Error ? error.message : 'Erro desconhecido');
@@ -261,8 +255,8 @@ export class FormLogin {
     }
   }
 
-  private async sendLoginRequest(email: string, password: string): Promise<{ requires2FA: boolean; token?: string }> {
-    const response = await fetch('http://localhost:3000/auth/login', {
+  private async sendRegisterRequest(nickname: string, email: string, password: string) {
+    const response = await fetch('http://localhost:3000/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -278,90 +272,8 @@ export class FormLogin {
     return await response.json();
   }
 
-  private show2FAPopup(): void {
-    // Cria overlay
-    const overlay = document.createElement('div');
-    overlay.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
 
-    // Cria popup
-    const popup = document.createElement('div');
-    popup.className = 'bg-arcade-darker border-neon-blue border-2 rounded-lg p-6 w-full max-w-md relative';
-
-    // Título
-    const title = document.createElement('h3');
-    title.className = 'text-xl font-bold text-white neon-text mb-4';
-    title.textContent = 'Verificação em Duas Etapas';
-
-    // Input do código
-    const codeInput = document.createElement('input');
-    codeInput.type = 'text';
-    codeInput.placeholder = 'Digite seu código 2FA';
-    codeInput.className = 'w-full bg-arcade-dark border-neon-blue border rounded-md px-4 py-2 text-white mb-4';
-
-    // Botão de enviar
-    const submitButton = document.createElement('button');
-    submitButton.className = 'w-full bg-neon-blue hover:bg-neon-green text-black font-bold py-2 rounded-md';
-    submitButton.textContent = 'Enviar';
-
-    // Evento de envio do código 2FA
-    submitButton.addEventListener('click', async () => {
-      const code = codeInput.value.trim();
-      if (!code) {
-        showToast('Por favor, digite o código 2FA', 'error');
-        return;
-      }
-
-      submitButton.disabled = true;
-      submitButton.innerHTML = '<span class="loading-spinner"></span>';
-
-      try {
-        await this.verify2FACode(code);
-        overlay.remove();
-        this.config.on2FASuccess?.();
-      } catch (error) {
-        showToast('Código inválido', 'error');
-      } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Enviar';
-      }
-    });
-
-    // Monta a estrutura
-    popup.appendChild(title);
-    popup.appendChild(codeInput);
-    popup.appendChild(submitButton);
-    overlay.appendChild(popup);
-
-    // Adiciona ao body
-    document.body.appendChild(overlay);
-
-    // Fecha ao clicar fora
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) {
-        overlay.remove();
-      }
-    });
-  }
-
-  private async verify2FACode(code: string): Promise<void> {
-    const response = await fetch('http://localhost:3000/auth/2fa/verify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ code }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Código inválido');
-    }
-
-    const data = await response.json();
-    this.config.onLoginSuccess?.(data.token);
-  }
-  
-
-  // Cria divisão "ou continue com"
+  // Cria divisão
   private createDivider(): HTMLElement {
     const container = document.createElement('div');
     container.className = 'relative flex items-center justify-center';
@@ -373,20 +285,6 @@ export class FormLogin {
 
 
     return container;
-  }
-
-
-  // Adiciona footer do formulário
-  private addFormFooter(container: HTMLElement): void {
-    const footer = document.createElement('div');
-    footer.className = 'flex flex-col space-y-4 items-center justify-center mt-6';
-
-    const text = document.createElement('p');
-    text.className = 'text-sm text-gray-300';
-    text.innerHTML = 'Não possui uma conta? <a href="#register" class="text-neon-pink hover:text-neon-purple transition-colors font-medium">Registre-se</a>';
-
-    footer.appendChild(text);
-    container.appendChild(footer);
   }
 
   // Factory method para criar ícones SVG
@@ -458,32 +356,18 @@ export class FormLogin {
     });
 
     // Form submission
-    this.loginForm.addEventListener('submit', (e) => {
+    this.RegisterForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      this.handleLogin();
+      this.handleRegister();
     });
 
   }
 
-  // // Manipula o login normal
-  // private handleLogin(): void {
-  //   const email = this.emailInput.value;
-  //   const password = this.passwordInput.value;
-    
-  //   if (email && password) {
-  //     showToast('Login bem-sucedido!', 'success');
-  //     this.config.onLoginSuccess?.();
-  //   } else {
-  //     showToast('Por favor, preencha todos os campos!', 'error');
-  //     this.config.onLoginError?.('Campos obrigatórios não preenchidos');
-  //   }
-  // }
-
 }
 
 // Função utilitária para facilitar o uso do componente
-export function renderLoginForm(parentElement: HTMLElement, config?: FormLoginConfig): FormLogin {
-  const formLogin = new FormLogin(config);
-  parentElement.appendChild(formLogin.render());
-  return formLogin;
+export function renderRegisterForm(parentElement: HTMLElement, config?: FormRegisterConfig): FormRegister {
+  const formRegister = new FormRegister(config);
+  parentElement.appendChild(formRegister.render());
+  return formRegister;
 }
